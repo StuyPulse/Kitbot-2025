@@ -1,17 +1,22 @@
 package com.stuypulse.robot.constants;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.util.vision.AprilTag;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /** This interface stores information about the field elements. */
 public interface Field {
@@ -36,25 +41,29 @@ public interface Field {
 
     /*** APRILTAGS ***/
 
-    double APRILTAG_SIZE = Units.inchesToMeters(6.125);
-
     enum NamedTags {
-        BLUE_SOURCE_RIGHT,
-        BLUE_SOURCE_LEFT,
-        RED_SPEAKER_OFFSET,
-        RED_SPEAKER,
-        RED_AMP,
-        BLUE_AMP,
-        BLUE_SPEAKER,
-        BLUE_SPEAKER_OFFSET,
-        RED_SOURCE_RIGHT,
-        RED_SOURCE_LEFT,
-        RED_STAGE_LEFT,
-        RED_STAGE_RIGHT,
-        RED_STAGE_FAR,
-        BLUE_STAGE_FAR,
-        BLUE_STAGE_LEFT,
-        BLUE_STAGE_RIGHT;
+        RED_KL_CORAL_STATION,
+        RED_CD_CORAL_STATION,
+        RED_PROCESSOR,
+        BLUE_BARGE_RED_SIDE,
+        RED_BARGE_RED_SIDE,
+        RED_KL,
+        RED_AB,
+        RED_CD,
+        RED_EF,
+        RED_GH,
+        RED_IJ,
+        BLUE_CD_CORAL_STATION,
+        BLUE_KL_CORAL_STATION,
+        BLUE_BARGE_BLUE_SIDE,
+        RED_BARGE_BLUE_SIDE,
+        BLUE_PROCESSOR,
+        BLUE_CD,
+        BLUE_AB,
+        BLUE_KL,
+        BLUE_IJ,
+        BLUE_GH,
+        BLUE_EF;
 
         public final AprilTag tag;
 
@@ -72,23 +81,29 @@ public interface Field {
     }
 
     AprilTag APRILTAGS[] = {
-        // 2024 Field AprilTag Layout
-        new AprilTag(1,  new Pose3d(new Translation3d(Units.inchesToMeters(593.68), Units.inchesToMeters(9.68), Units.inchesToMeters(53.38)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(120)))),
-        new AprilTag(2,  new Pose3d(new Translation3d(Units.inchesToMeters(637.21), Units.inchesToMeters(34.79), Units.inchesToMeters(53.38)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(120)))),
-        new AprilTag(3,  new Pose3d(new Translation3d(Units.inchesToMeters(652.73), Units.inchesToMeters(196.17), Units.inchesToMeters(57.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
-        new AprilTag(4,  new Pose3d(new Translation3d(Units.inchesToMeters(652.73), Units.inchesToMeters(218.42), Units.inchesToMeters(57.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
-        new AprilTag(5,  new Pose3d(new Translation3d(Units.inchesToMeters(578.77), Units.inchesToMeters(323.0), Units.inchesToMeters(53.38)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(270)))),
-        new AprilTag(6,  new Pose3d(new Translation3d(Units.inchesToMeters(72.5), Units.inchesToMeters(323.0), Units.inchesToMeters(53.38)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(270)))),
-        new AprilTag(7,  new Pose3d(new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(218.42), Units.inchesToMeters(57.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
-        new AprilTag(8,  new Pose3d(new Translation3d(Units.inchesToMeters(-1.5), Units.inchesToMeters(196.17), Units.inchesToMeters(57.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
-        new AprilTag(9,  new Pose3d(new Translation3d(Units.inchesToMeters(14.02), Units.inchesToMeters(34.79), Units.inchesToMeters(53.38)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(60)))),
-        new AprilTag(10, new Pose3d(new Translation3d(Units.inchesToMeters(57.54), Units.inchesToMeters(9.68), Units.inchesToMeters(53.38)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(60)))),
-        new AprilTag(11, new Pose3d(new Translation3d(Units.inchesToMeters(468.69), Units.inchesToMeters(146.19), Units.inchesToMeters(52.0)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(300)))),
-        new AprilTag(12, new Pose3d(new Translation3d(Units.inchesToMeters(468.69), Units.inchesToMeters(177.10), Units.inchesToMeters(52.0)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(60)))),
-        new AprilTag(13, new Pose3d(new Translation3d(Units.inchesToMeters(441.74), Units.inchesToMeters(161.62), Units.inchesToMeters(52.0)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
-        new AprilTag(14, new Pose3d(new Translation3d(Units.inchesToMeters(209.48), Units.inchesToMeters(161.62), Units.inchesToMeters(52.0)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
-        new AprilTag(15, new Pose3d(new Translation3d(Units.inchesToMeters(182.73), Units.inchesToMeters(177.10), Units.inchesToMeters(52.0)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(120)))),
-        new AprilTag(16, new Pose3d(new Translation3d(Units.inchesToMeters(182.73), Units.inchesToMeters(146.19), Units.inchesToMeters(52.0)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(240)))),
+        // 2025 Field AprilTag Layout
+        new AprilTag(1,  new Pose3d(new Translation3d(Units.inchesToMeters(657.37), Units.inchesToMeters(25.80), Units.inchesToMeters(58.50)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(126)))),
+        new AprilTag(2,  new Pose3d(new Translation3d(Units.inchesToMeters(657.37), Units.inchesToMeters(291.20), Units.inchesToMeters(58.50)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(234)))),
+        new AprilTag(3,  new Pose3d(new Translation3d(Units.inchesToMeters(455.15), Units.inchesToMeters(317.15), Units.inchesToMeters(51.25)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(270)))),
+        new AprilTag(4,  new Pose3d(new Translation3d(Units.inchesToMeters(365.20), Units.inchesToMeters(241.64), Units.inchesToMeters(73.54)), new Rotation3d(Units.degreesToRadians(30), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
+        new AprilTag(5,  new Pose3d(new Translation3d(Units.inchesToMeters(365.20), Units.inchesToMeters(75.39), Units.inchesToMeters(73.54)), new Rotation3d(Units.degreesToRadians(30), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
+        new AprilTag(6,  new Pose3d(new Translation3d(Units.inchesToMeters(530.49), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(300)))),
+        new AprilTag(7,  new Pose3d(new Translation3d(Units.inchesToMeters(546.87), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
+        new AprilTag(8,  new Pose3d(new Translation3d(Units.inchesToMeters(530.49), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(60)))),
+        new AprilTag(9,  new Pose3d(new Translation3d(Units.inchesToMeters(497.77), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(120)))),
+        new AprilTag(10,  new Pose3d(new Translation3d(Units.inchesToMeters(481.39), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
+        new AprilTag(11,  new Pose3d(new Translation3d(Units.inchesToMeters(497.77), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(240)))),
+        new AprilTag(12,  new Pose3d(new Translation3d(Units.inchesToMeters(33.51), Units.inchesToMeters(25.80), Units.inchesToMeters(58.50)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(54)))),
+        new AprilTag(13,  new Pose3d(new Translation3d(Units.inchesToMeters(33.51), Units.inchesToMeters(291.20), Units.inchesToMeters(58.50)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(306)))),
+        new AprilTag(14,  new Pose3d(new Translation3d(Units.inchesToMeters(325.68), Units.inchesToMeters(241.64), Units.inchesToMeters(73.54)), new Rotation3d(Units.degreesToRadians(30), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
+        new AprilTag(15,  new Pose3d(new Translation3d(Units.inchesToMeters(325.68), Units.inchesToMeters(75.39), Units.inchesToMeters(73.54)), new Rotation3d(Units.degreesToRadians(30), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
+        new AprilTag(16,  new Pose3d(new Translation3d(Units.inchesToMeters(235.73), Units.inchesToMeters(-0.15), Units.inchesToMeters(51.25)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(90)))),
+        new AprilTag(17,  new Pose3d(new Translation3d(Units.inchesToMeters(160.39), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(240)))),
+        new AprilTag(18,  new Pose3d(new Translation3d(Units.inchesToMeters(144.0), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(180)))),
+        new AprilTag(19,  new Pose3d(new Translation3d(Units.inchesToMeters(160.39), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(120)))),
+        new AprilTag(20,  new Pose3d(new Translation3d(Units.inchesToMeters(193.10), Units.inchesToMeters(186.83), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(60)))),
+        new AprilTag(21,  new Pose3d(new Translation3d(Units.inchesToMeters(209.49), Units.inchesToMeters(158.50), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(0)))),
+        new AprilTag(22,  new Pose3d(new Translation3d(Units.inchesToMeters(193.10), Units.inchesToMeters(130.17), Units.inchesToMeters(12.13)), new Rotation3d(Units.degreesToRadians(0), Units.degreesToRadians(0), Units.degreesToRadians(300)))),
     };
 
     public static boolean isValidTag(int id) {
@@ -136,6 +151,104 @@ public interface Field {
             }
         }
         return null;
+    }
+
+    /*** REEF POSITIONS ***/
+
+    double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
+
+    public enum CoralBranch {
+        A,
+        B,
+        C,
+        D,
+        E,
+        F,
+        G,
+        H,
+        I,
+        J,
+        K,
+        L;
+
+        public boolean isLeftPeg() {
+            switch (this) {
+                case A:
+                case C:
+                case E:
+                case G:
+                case I:
+                case K:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+    }
+
+    public static Pose2d getTargetPoseForCoralBranch(CoralBranch position) { 
+        Pose3d correspondingAprilTagPose;
+        switch (position) {
+            case A:
+            case B:
+                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_AB.getLocation() : NamedTags.RED_AB.getLocation();
+                break;
+            case C:
+            case D:
+                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_CD.getLocation() : NamedTags.RED_CD.getLocation();
+                break;
+            case E:
+            case F:
+                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_EF.getLocation() : NamedTags.RED_EF.getLocation();
+                break;
+            case G:
+            case H:
+                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_GH.getLocation() : NamedTags.RED_GH.getLocation();
+                break;
+            case I:
+            case J:
+                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_IJ.getLocation() : NamedTags.RED_IJ.getLocation();
+                break;
+            case K:
+            case L:
+                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_KL.getLocation() : NamedTags.RED_KL.getLocation();
+                break;
+            default:
+                throw new IllegalArgumentException();
+        }
+    
+        Pose2d targetPose = correspondingAprilTagPose.toPose2d()
+                                .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (position.isLeftPeg() ? -1 : 1), new Rotation2d()));
+        
+        return targetPose;
+    }
+
+    /*** CORAL STATIONS ***/
+    public static Pose2d getTargetPoseForCDCoralStation() {
+        return Robot.isBlue()
+            ? NamedTags.BLUE_CD_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Settings.LENGTH / 2, 0, new Rotation2d()))
+            : NamedTags.RED_CD_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Settings.LENGTH / 2, 0, new Rotation2d()));
+    }
+
+    public static Pose2d getTargetPoseForKLCoralStation() {
+        return Robot.isBlue()
+            ? NamedTags.BLUE_KL_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Settings.LENGTH / 2, 0, new Rotation2d()))
+            : NamedTags.RED_KL_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Settings.LENGTH / 2, 0, new Rotation2d()));
+    }
+
+    public static Pose2d getTargetPoseForClosestCoralStation() {
+        Pose2d robot = Odometry.getInstance().getPose();
+        SmartDashboard.putNumber("testing/pose x", robot.getX());
+        SmartDashboard.putNumber("testing/pose y", robot.getX());
+
+        Pose2d cdCoralStation = getTargetPoseForCDCoralStation();
+        Pose2d klCoralStation = getTargetPoseForKLCoralStation();
+
+        List<Pose2d> coralStations = new ArrayList<Pose2d>();
+        coralStations.add(cdCoralStation);
+        coralStations.add(klCoralStation);
+
+        return robot.nearest(coralStations);
     }
 
     /**** EMPTY FIELD POSES ****/

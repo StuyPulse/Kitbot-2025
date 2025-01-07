@@ -1,12 +1,19 @@
 package com.stuypulse.robot.subsystems.dropper;
 
+import com.stuypulse.robot.Robot;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public abstract class Dropper extends SubsystemBase {
     public static final Dropper instance;
 
     static {
-        instance = new DropperImpl();
+        if (Robot.isReal()) {
+            instance = new DropperImpl();
+        }
+        else {
+            instance = new DropperSim();
+        }
     }
     
     public static Dropper getInstance() {

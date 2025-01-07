@@ -1,10 +1,7 @@
-/************************ PROJECT PHIL ************************/
-/* Copyright (c) 2024 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
-
 package com.stuypulse.robot.constants;
 
+import com.pathplanner.lib.config.PIDConstants;
+import com.pathplanner.lib.path.PathConstraints;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.ControllerGroup;
@@ -12,12 +9,10 @@ import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.network.SmartBoolean;
 import com.stuypulse.stuylib.network.SmartNumber;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.Vector;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
@@ -35,12 +30,13 @@ public interface Settings {
     double LENGTH = Units.inchesToMeters(0);
 
     public interface Dropper {
-        double SCORE_SPEED = 0.1;
+        double DROP_SPEED = 0.1;
+        double DROP_TIME = 1.0;
     }
     
     public interface Swerve {
-        double WIDTH = 0.0; // intake side 
-        double LENGTH = 0.0; 
+        double WIDTH = Units.inchesToMeters(22.984); // intake side 
+        double LENGTH = Units.inchesToMeters(22.984); 
 
         double MAX_LINEAR_VELOCITY = 4.9;
         double MAX_LINEAR_ACCEL = 15;
@@ -49,6 +45,16 @@ public interface Settings {
 
         double MODULE_VELOCITY_DEADBAND = 0.02; // (m/s)
         double MAX_MODULE_SPEED = 5.0; // (m/s)
+
+        PathConstraints DEFAULT_CONSTRAINTS =
+            new PathConstraints(
+                MAX_LINEAR_VELOCITY,
+                MAX_LINEAR_ACCEL,
+                MAX_ANGULAR_VELOCITY,
+                MAX_ANGULAR_ACCEL);
+
+        double XY_TOLERANCE = 0.1; // meters
+        double THETA_TOLERANCE = 0.1; // radians????
 
         public interface ModuleOffsets {
             public static Translation2d getXYOffset(ModulePosition position) {
@@ -123,12 +129,24 @@ public interface Settings {
         public interface Controllers {
             public interface Chassis {
                 public interface XY {
-                    double kP = 0.0;
+                    public static Controller getController() {
+                        return new PIDController(kP, kI, kD);
+                    }
+                    public static PIDConstants getConstants() {
+                        return new PIDConstants(kP, kI, kD);
+                    }
+                    double kP = 3.0;
                     double kI = 0.0;
                     double kD = 0.0;
                 }
                 public interface Theta {
-                    double kP = 0.0;
+                    public static Controller getController() {
+                        return new PIDController(kP, kI, kD);
+                    }
+                    public static PIDConstants getConstants() {
+                        return new PIDConstants(kP, kI, kD);
+                    }
+                    double kP = 3.0;
                     double kI = 0.0;
                     double kD = 0.0;
                 }
@@ -241,5 +259,27 @@ public interface Settings {
     public interface Vision {
         double POSE_AMBIGUITY_RATIO_THRESHOLD = 0.60;
         Vector<N3> STDDEVS = VecBuilder.fill(0.3, 0.3, Math.toRadians(30));
+    }
+
+    public interface Driver {
+        public interface Drive {
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.03);
+
+            SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
+            SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
+
+            SmartNumber MAX_TELEOP_SPEED = new SmartNumber("Driver Settings/Drive/Max Speed", Swerve.MAX_LINEAR_VELOCITY);
+            SmartNumber MAX_TELEOP_ACCEL = new SmartNumber("Driver Settings/Drive/Max Accleration", Swerve.MAX_LINEAR_ACCEL);
+        }
+
+        public interface Turn {
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.03);
+
+            SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
+            SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);
+
+            SmartNumber MAX_TELEOP_TURN_SPEED = new SmartNumber("Driver Settings/Turn/Max Turn Speed (rad/s)", Swerve.MAX_ANGULAR_VELOCITY);
+            SmartNumber MAX_TELEOP_TURN_ACCEL = new SmartNumber("Driver Settings/Turn/Max Turn Accel (rad/s^2)", Swerve.MAX_ANGULAR_ACCEL);
+        }
     }
 }

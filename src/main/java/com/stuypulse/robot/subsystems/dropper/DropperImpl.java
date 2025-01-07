@@ -21,7 +21,7 @@ public class DropperImpl extends Dropper {
     private void setMotorBasedOnState() {
         switch (state) {
             case DROPPING:
-                motor.set(Settings.Dropper.SCORE_SPEED);
+                motor.set(Settings.Dropper.DROP_SPEED);
                 break;
             case STOP:
                 motor.stopMotor();

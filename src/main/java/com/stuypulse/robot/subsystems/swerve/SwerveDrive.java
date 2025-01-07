@@ -24,6 +24,10 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.RobotConfig;
+import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -68,6 +72,8 @@ public class SwerveDrive extends SubsystemBase {
 
     private final FieldObject2d[] module2ds;
 
+    /** PATHPLANNER */
+
     protected SwerveDrive(SwerveModule... modules) {
         this.modules = modules;
 
@@ -76,6 +82,28 @@ public class SwerveDrive extends SubsystemBase {
         kinematics = new SwerveDriveKinematics(getModuleOffsets());
 
         module2ds = new FieldObject2d[modules.length];
+    }
+
+    public void configureAutoBuilder() {
+        try{
+            AutoBuilder.configure(
+                Odometry.getInstance()::getPose,
+                (pose) -> Odometry.getInstance().reset(pose),
+                this::getChassisSpeeds,
+                (speeds, feedforwards) -> setChassisSpeeds(speeds),
+                new PPHolonomicDriveController(
+                    Settings.Swerve.Controllers.Chassis.XY.getConstants(), // Translation PID constants
+                    Settings.Swerve.Controllers.Chassis.Theta.getConstants() // Rotation PID constants
+                ),
+                RobotConfig.fromGUISettings(),
+                () -> false,
+                instance
+            );
+
+            PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void initFieldObjects(Field2d field) {
@@ -121,8 +149,6 @@ public class SwerveDrive extends SubsystemBase {
     public ChassisSpeeds getChassisSpeeds() {
         return getKinematics().toChassisSpeeds(getModuleStates());
     }
-
-
 
     /** MODULE STATES API **/
     public void drive(Vector2D velocity, double omega) {
@@ -189,21 +215,6 @@ public class SwerveDrive extends SubsystemBase {
         return kinematics;
     }
 
-    public Rotation2d getBalanceAngle() {
-        Rotation2d pitch = getGyroPitch();
-        Rotation2d roll = getGyroRoll();
-        Rotation2d yaw = Odometry.getInstance().getRotation();
-
-        double facingSlope = pitch.getTan() * yaw.getCos() + roll.getTan() * yaw.getSin();
-        double maxSlope = Math.sqrt(Math.pow(roll.getTan(), 2) + Math.pow(pitch.getTan(), 2));
-
-
-        SmartDashboard.putNumber("Swerve/Max Slope", maxSlope);
-        SmartDashboard.putNumber("Swerve/Facing Slope", facingSlope);
-
-        return Rotation2d.fromRadians(Math.signum(facingSlope) * Math.atan(maxSlope));
-    }
-
     public void setXMode() {
         SwerveModuleState[] state = {
             new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
@@ -227,7 +238,6 @@ public class SwerveDrive extends SubsystemBase {
             ));
         }
 
-        SmartDashboard.putNumber("Swerve/Balance Angle (deg)", getBalanceAngle().getDegrees());
         SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroAngle().getDegrees());
         SmartDashboard.putNumber("Swerve/Gyro Pitch", getGyroPitch().getDegrees());
         SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll().getDegrees());

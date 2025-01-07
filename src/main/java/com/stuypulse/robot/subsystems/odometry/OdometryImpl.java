@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.odometry;
 
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.robot.subsystems.vision.AprilTagVision;
@@ -61,12 +62,7 @@ public class OdometryImpl extends Odometry {
 
     @Override
     public Pose2d getPose() {
-        if (USE_VISION_ANGLE.get())
-            return poseEstimator.getEstimatedPosition();
-        else
-            return new Pose2d(
-                poseEstimator.getEstimatedPosition().getTranslation(),
-                odometry.getPoseMeters().getRotation());
+        return poseEstimator.getEstimatedPosition();
     }
 
     @Override
