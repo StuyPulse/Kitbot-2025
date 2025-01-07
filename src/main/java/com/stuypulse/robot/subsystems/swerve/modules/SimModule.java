@@ -9,6 +9,8 @@ import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
+import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
+import com.stuypulse.stuylib.control.feedforward.VelocityFeedforwardController;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swerve.Controllers.Modules;
@@ -80,7 +82,8 @@ public class SimModule extends SwerveModule {
         this.name = position.toString();
         this.location = Settings.Swerve.ModuleOffsets.getXYOffset(position);
 
-        this.driveController = new PIDController(Modules.Drive.kP, Modules.Drive.kI, Modules.Drive.kD);
+        this.driveController = new PIDController(Modules.Drive.kP, Modules.Drive.kI, Modules.Drive.kD)
+                                .add(new MotorFeedforward(Modules.Drive.kS, Modules.Drive.kV, Modules.Drive.kA).velocity());
         this.turnController = new AnglePIDController(Modules.Turn.kP, Modules.Turn.kI, Modules.Turn.kD);
 
         targetState = new SwerveModuleState();

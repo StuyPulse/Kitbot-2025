@@ -74,6 +74,9 @@ public class SwervePIDToPose extends Command {
         .filtered(new LowPassFilter(0.05))
         .filtered(x -> Math.abs(x));
 
+        xTolerance = Alignment.X_TOLERANCE;
+        yTolerance = Alignment.Y_TOLERANCE;
+        thetaTolerance = Alignment.THETA_TOLERANCE;
         velocityTolerance = 0.15;
 
         addRequirements(swerve);
@@ -112,7 +115,7 @@ public class SwervePIDToPose extends Command {
     }
 
     private boolean isAligned() {
-        return controller.isDone(xTolerance, yTolerance, thetaTolerance)
+        return controller.isDone(xTolerance, yTolerance, Math.toDegrees(thetaTolerance))
             && velocityError.get() < velocityTolerance;
     }
 

@@ -55,8 +55,8 @@ public interface Settings {
         
         public interface Alignment {
             double X_TOLERANCE = 0.1; // meters
-            double Y_TOLERANCE = 0.1; 
-            double THETA_TOLERANCE = 0.1; // ????
+            double Y_TOLERANCE = 0.1; // meters
+            double THETA_TOLERANCE = 0.1; // radians
 
             double XY_DEBOUNCE = 0.1;
             double THETA_DEBOUNCE = 0.1;
