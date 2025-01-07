@@ -158,105 +158,20 @@ public interface Settings {
                 }
             }
             public interface Modules {
-                public static AnglePIDController getTurnController(ModulePosition position) {
-                    switch (position) {
-                        case FRONT_LEFT:
-                            return new AnglePIDController(FrontLeft.Turn.kP, FrontLeft.Turn.kI, FrontLeft.Turn.kD);
-                        case FRONT_RIGHT:
-                            return new AnglePIDController(FrontRight.Turn.kP, FrontRight.Turn.kI, FrontRight.Turn.kD);
-                        case BACK_LEFT:
-                            return new AnglePIDController(BackLeft.Turn.kP, BackLeft.Turn.kI, BackLeft.Turn.kD);
-                        case BACK_RIGHT:
-                            return new AnglePIDController(BackRight.Turn.kP, BackRight.Turn.kI, BackRight.Turn.kD);
-                        default:
-                            throw new IllegalArgumentException();
-                    }
+                public interface Turn {
+                    double kP = 3.5;
+                    double kI = 0.0;
+                    double kD = 0.1;
                 }
-                public static ControllerGroup getDriveController(ModulePosition position) {
-                    switch (position) {
-                        case FRONT_LEFT:
-                            return new PIDController(FrontLeft.Drive.kP, FrontLeft.Drive.kI, FrontLeft.Drive.kD)
-                                .add(new MotorFeedforward(FrontLeft.Drive.kS, FrontLeft.Drive.kV, FrontLeft.Drive.kA).velocity());
-                        case FRONT_RIGHT:
-                            return new PIDController(FrontRight.Drive.kP, FrontRight.Drive.kI, FrontRight.Drive.kD)
-                                .add(new MotorFeedforward(FrontRight.Drive.kS, FrontRight.Drive.kV, FrontRight.Drive.kA).velocity());
-                        case BACK_LEFT:
-                            return new PIDController(BackLeft.Drive.kP, BackLeft.Drive.kI, BackLeft.Drive.kD)
-                                .add(new MotorFeedforward(BackLeft.Drive.kS, BackLeft.Drive.kV, BackLeft.Drive.kA).velocity());
-                        case BACK_RIGHT:
-                            return new PIDController(BackRight.Drive.kP, BackRight.Drive.kI, BackRight.Drive.kD)
-                                .add(new MotorFeedforward(BackRight.Drive.kS, BackRight.Drive.kV, BackRight.Drive.kA).velocity());
-                        default:
-                            throw new IllegalArgumentException();
-                    }
-                }
-                public interface FrontLeft {
-                    public interface Turn {
-                        double kP = 3.5;
-                        double kI = 0.0;
-                        double kD = 0.1;
-                    }
-                
-                    public interface Drive {
-                        double kP = 1.3;
-                        double kI = 0.0;
-                        double kD = 0.0;
-                
-                        double kS = 0.17335;
-                        double kV = 2.7274;
-                        double kA = 0.456;
-                    }
-                }
-                public interface FrontRight {
-                    public interface Turn {
-                        double kP = 3.5;
-                        double kI = 0.0;
-                        double kD = 0.1;
-                    }
-                
-                    public interface Drive {
-                        double kP = 1.3;
-                        double kI = 0.0;
-                        double kD = 0.0;
-                
-                        double kS = 0.17335;
-                        double kV = 2.7274;
-                        double kA = 0.456;
-                    }
-                }
-                public interface BackLeft {
-                    public interface Turn {
-                        double kP = 3.5;
-                        double kI = 0.0;
-                        double kD = 0.1;
-                    }
-                
-                    public interface Drive {
-                        double kP = 1.3;
-                        double kI = 0.0;
-                        double kD = 0.0;
-                
-                        double kS = 0.17335;
-                        double kV = 2.7274;
-                        double kA = 0.456;
-                    }
-                }
-                public interface BackRight {
-                    public interface Turn {
-                        double kP = 3.5;
-                        double kI = 0.0;
-                        double kD = 0.1;
-                    }
-                
-                    public interface Drive {
-                        double kP = 1.3;
-                        double kI = 0.0;
-                        double kD = 0.0;
-                
-                        double kS = 0.17335;
-                        double kV = 2.7274;
-                        double kA = 0.456;
-                    }
+            
+                public interface Drive {
+                    double kP = 1.3;
+                    double kI = 0.0;
+                    double kD = 0.0;
+            
+                    double kS = 0.17335;
+                    double kV = 2.7274;
+                    double kA = 0.456;
                 }
             }
         }

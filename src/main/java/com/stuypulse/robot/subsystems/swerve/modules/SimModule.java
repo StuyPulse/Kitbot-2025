@@ -7,10 +7,11 @@ package com.stuypulse.robot.subsystems.swerve.modules;
 
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.angle.AngleController;
+import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
+import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
-import com.stuypulse.stuylib.streams.angles.filters.ARateLimit;
-
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Swerve.Controllers.Modules;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
 
 import edu.wpi.first.math.Matrix;
@@ -79,29 +80,14 @@ public class SimModule extends SwerveModule {
         this.name = position.toString();
         this.location = Settings.Swerve.ModuleOffsets.getXYOffset(position);
 
-        this.driveController = Settings.Swerve.Controllers.Modules.getDriveController(position);
-        this.turnController = Settings.Swerve.Controllers.Modules.getTurnController(position).setSetpointFilter(new ARateLimit(Settings.Swerve.MAX_ANGULAR_VELOCITY));
+        this.driveController = new PIDController(Modules.Drive.kP, Modules.Drive.kI, Modules.Drive.kD);
+        this.turnController = new AnglePIDController(Modules.Turn.kP, Modules.Turn.kI, Modules.Turn.kD);
 
         targetState = new SwerveModuleState();
 
         turnSim = new LinearSystemSim<>(LinearSystemId.identifyPositionSystem(0.25, 0.007));
 
-        switch (position) {
-            case FRONT_LEFT:
-                driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kV, Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kA));
-                break;
-            case FRONT_RIGHT:
-                driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kV, Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kA));
-                break;
-            case BACK_LEFT:
-                driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kV, Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kA));
-                break;
-            case BACK_RIGHT:
-                driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kV, Settings.Swerve.Controllers.Modules.FrontLeft.Drive.kA));
-                break;
-            default:
-                throw new IllegalArgumentException("");
-        }
+        driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Modules.Drive.kV, Modules.Drive.kA));
     }
 
     @Override
