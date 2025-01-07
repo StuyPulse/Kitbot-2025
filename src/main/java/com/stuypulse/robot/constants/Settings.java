@@ -52,9 +52,15 @@ public interface Settings {
                 MAX_LINEAR_ACCEL,
                 MAX_ANGULAR_VELOCITY,
                 MAX_ANGULAR_ACCEL);
+        
+        public interface Alignment {
+            double X_TOLERANCE = 0.1; // meters
+            double Y_TOLERANCE = 0.1; 
+            double THETA_TOLERANCE = 0.1; // ????
 
-        double XY_TOLERANCE = 0.1; // meters
-        double THETA_TOLERANCE = 0.1; // radians????
+            double XY_DEBOUNCE = 0.1;
+            double THETA_DEBOUNCE = 0.1;
+        }
 
         public interface ModuleOffsets {
             public static Translation2d getXYOffset(ModulePosition position) {

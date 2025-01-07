@@ -1,8 +1,3 @@
-/************************ PROJECT PHIL ************************/
-/* Copyright (c) 2024 StuyPulse Robotics. All rights reserved.*/
-/* This work is licensed under the terms of the MIT license.  */
-/**************************************************************/
-
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.Test;
@@ -10,6 +5,7 @@ import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.dropper.DropperDrop;
 import com.stuypulse.robot.commands.dropper.DropperStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
+import com.stuypulse.robot.commands.swerve.SwervePIDToPose;
 import com.stuypulse.robot.commands.swerve.SwervePathFind;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
@@ -58,8 +54,8 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        swerve.setDefaultCommand(new Test());
-        // swerve.setDefaultCommand(new SwerveDriveDrive(driver));
+        // swerve.setDefaultCommand(new Test());
+        swerve.setDefaultCommand(new SwerveDriveDrive(driver));
     }
 
     /***************/
@@ -70,6 +66,9 @@ public class RobotContainer {
         driver.getRightTriggerButton()
             .onTrue(new DropperDrop())
             .onFalse(new DropperStop());
+        
+        driver.getRightButton()
+            .whileTrue(new SwervePIDToPose(() -> Field.getTargetPoseForCoralBranch(Field.getClosestBranch())));
     }
 
     /**************/

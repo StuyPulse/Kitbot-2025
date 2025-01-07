@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 /** This interface stores information about the field elements. */
 public interface Field {
@@ -236,19 +237,29 @@ public interface Field {
             : NamedTags.RED_KL_CORAL_STATION.getLocation().toPose2d().plus(new Transform2d(Settings.LENGTH / 2, 0, new Rotation2d()));
     }
 
-    public static Pose2d getTargetPoseForClosestCoralStation() {
+    public static boolean robotIsCloserToCDCoralStation() {
         Pose2d robot = Odometry.getInstance().getPose();
-        SmartDashboard.putNumber("testing/pose x", robot.getX());
-        SmartDashboard.putNumber("testing/pose y", robot.getX());
 
         Pose2d cdCoralStation = getTargetPoseForCDCoralStation();
         Pose2d klCoralStation = getTargetPoseForKLCoralStation();
 
-        List<Pose2d> coralStations = new ArrayList<Pose2d>();
-        coralStations.add(cdCoralStation);
-        coralStations.add(klCoralStation);
+        return robot.minus(cdCoralStation).getTranslation().getNorm() < robot.minus(klCoralStation).getTranslation().getNorm();
+    }
 
-        return robot.nearest(coralStations);
+    public static CoralBranch getClosestBranch() {
+        CoralBranch nearestBranch = CoralBranch.A;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (CoralBranch branch : CoralBranch.values()) {
+            Pose2d target = getTargetPoseForCoralBranch(branch);
+            double distance = Odometry.getInstance().getPose().minus(target).getTranslation().getNorm();
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearestBranch = branch;
+            }
+        }
+
+        return nearestBranch;
     }
 
     /**** EMPTY FIELD POSES ****/
