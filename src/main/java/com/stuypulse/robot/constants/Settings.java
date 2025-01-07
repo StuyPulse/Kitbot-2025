@@ -29,9 +29,11 @@ public interface Settings {
     double WIDTH = Units.inchesToMeters(0); // intake side 
     double LENGTH = Units.inchesToMeters(0);
 
+    double WAIT_TIME_AT_CORAL_STATION = 0.75;
+
     public interface Dropper {
         double DROP_SPEED = 0.1;
-        double DROP_TIME = 1.0;
+        double DROP_TIME = 0.75;
     }
     
     public interface Swerve {

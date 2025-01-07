@@ -1,6 +1,6 @@
 package com.stuypulse.robot;
 
-import com.stuypulse.robot.commands.Test;
+import com.stuypulse.robot.commands.AutoPilot;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.dropper.DropperDrop;
 import com.stuypulse.robot.commands.dropper.DropperStop;
@@ -54,7 +54,6 @@ public class RobotContainer {
     /****************/
 
     private void configureDefaultCommands() {
-        // swerve.setDefaultCommand(new Test());
         swerve.setDefaultCommand(new SwerveDriveDrive(driver));
     }
 
@@ -69,6 +68,9 @@ public class RobotContainer {
         
         driver.getRightButton()
             .whileTrue(new SwervePIDToPose(() -> Field.getTargetPoseForCoralBranch(Field.getClosestBranch())));
+        
+        driver.getTopButton()
+            .whileTrue(new AutoPilot());
     }
 
     /**************/
