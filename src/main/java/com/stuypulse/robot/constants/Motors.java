@@ -8,6 +8,13 @@ package com.stuypulse.robot.constants;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
+import com.revrobotics.spark.SparkBase;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
+
+import edu.wpi.first.math.geometry.Translation2d;
 
 /*-
  * File containing all of the configurations that different motors require.
@@ -19,6 +26,25 @@ import com.ctre.phoenix.motorcontrol.can.WPI_VictorSPX;
  *  - The Open Loop Ramp Rate
  */
 public interface Motors {
+
+    public interface Swerve {
+        public interface Turn {
+            SparkBaseConfig FRONT_LEFT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+            SparkBaseConfig FRONT_RIGHT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+            SparkBaseConfig BACK_LEFT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+            SparkBaseConfig BACK_RIGHT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+        }
+        public interface Drive {
+            SparkBaseConfig FRONT_LEFT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+            SparkBaseConfig FRONT_RIGHT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+            SparkBaseConfig BACK_LEFT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+            SparkBaseConfig BACK_RIGHT = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+        }
+    }
+
+    public interface Dropper {
+        SparkBaseConfig MOTOR = new SparkMaxConfig().inverted(false).idleMode(IdleMode.kBrake);
+    }
 
     /** Classes to store all of the values a motor needs */
 

@@ -12,4 +12,29 @@ public interface Ports {
         int OPERATOR = 1;
         int DEBUGGER = 2;
     }
+
+    public interface Swerve {
+        public interface Drive {
+            int FRONT_LEFT = 0;
+            int FRONT_RIGHT = 0;
+            int BACK_LEFT = 0;
+            int BACK_RIGHT = 0;
+        }
+        public interface Turn {
+            int FRONT_LEFT = 0;
+            int FRONT_RIGHT = 0;
+            int BACK_LEFT = 0;
+            int BACK_RIGHT = 0;
+        }
+        public interface CANCoderIds {
+            int FRONT_LEFT = 0;
+            int FRONT_RIGHT = 0;
+            int BACK_LEFT = 0;
+            int BACK_RIGHT = 0;
+        }
+    }
+
+    public interface Dropper {
+        int MOTOR = 0;
+    }
 }
