@@ -34,6 +34,8 @@ public interface Settings {
     public interface Dropper {
         double DROP_SPEED = 0.1;
         double DROP_TIME = 0.75;
+
+        double REVERSE_SPEED = 0.1;
     }
     
     public interface Swerve {
