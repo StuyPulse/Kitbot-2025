@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
@@ -219,9 +220,16 @@ public interface Field {
         }
     
         Pose2d targetPose = correspondingAprilTagPose.toPose2d()
-                                .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (position.isLeftPeg() ? -1 : 1), new Rotation2d()));
+                                .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (position.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
         
         return targetPose;
+    }
+
+    public static void addTargetPosesForCoralBranchesToField() {
+        for (CoralBranch branch : CoralBranch.values()) {
+            Field2d field = Odometry.getInstance().getField();
+            field.getObject("Coral Branch " + branch.toString()).setPose(getTargetPoseForCoralBranch(branch));
+        }
     }
 
     /*** CORAL STATIONS ***/

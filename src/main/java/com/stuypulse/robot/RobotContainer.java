@@ -44,6 +44,8 @@ public class RobotContainer {
 
     public RobotContainer() {
         swerve.configureAutoBuilder();
+        Field.addTargetPosesForCoralBranchesToField();
+        
         configureDefaultCommands();
         configureButtonBindings();
         configureAutons();

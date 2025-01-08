@@ -27,6 +27,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinder;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class SwerveDrive extends SubsystemBase {
@@ -100,7 +102,7 @@ public class SwerveDrive extends SubsystemBase {
                 instance
             );
 
-            PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
+            // PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
         } catch (Exception e) {
             e.printStackTrace();
         }
