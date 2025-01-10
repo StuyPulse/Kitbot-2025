@@ -3,6 +3,7 @@ package com.stuypulse.robot;
 import com.stuypulse.robot.commands.AutoPilot;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.dropper.DropperDrop;
+import com.stuypulse.robot.commands.dropper.DropperShootSequence;
 import com.stuypulse.robot.commands.dropper.DropperStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwervePIDToPose;
@@ -64,12 +65,16 @@ public class RobotContainer {
     /***************/
 
     private void configureButtonBindings() {
+
+        // manual shoot
         driver.getRightTriggerButton()
             .onTrue(new DropperDrop())
             .onFalse(new DropperStop());
         
+        // align to closest coral and then shoot automatically
         driver.getRightButton()
-            .whileTrue(new SwervePIDToPose(() -> Field.getTargetPoseForCoralBranch(Field.getClosestBranch())));
+            .whileTrue(new SwervePIDToPose(() -> Field.getTargetPoseForCoralBranch(Field.getClosestBranch()))
+                .andThen(new DropperShootSequence()));
         
         driver.getTopButton()
             .whileTrue(new AutoPilot());
