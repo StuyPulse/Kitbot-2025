@@ -15,26 +15,26 @@ public interface Ports {
 
     public interface Swerve {
         public interface Drive {
-            int FRONT_LEFT = 0;
-            int FRONT_RIGHT = 0;
-            int BACK_LEFT = 0;
-            int BACK_RIGHT = 0;
+            int FRONT_LEFT = 11;
+            int BACK_LEFT = 13;
+            int BACK_RIGHT = 15;
+            int FRONT_RIGHT = 17;
         }
         public interface Turn {
-            int FRONT_LEFT = 0;
-            int FRONT_RIGHT = 0;
-            int BACK_LEFT = 0;
-            int BACK_RIGHT = 0;
+            int FRONT_LEFT = 10;
+            int BACK_LEFT = 12;
+            int BACK_RIGHT = 14;
+            int FRONT_RIGHT = 16;
         }
         public interface CANCoderIds {
-            int FRONT_LEFT = 0;
-            int FRONT_RIGHT = 0;
-            int BACK_LEFT = 0;
-            int BACK_RIGHT = 0;
+            int FRONT_LEFT = 1;
+            int FRONT_RIGHT = 2;
+            int BACK_LEFT = 3;
+            int BACK_RIGHT = 4;
         }
     }
 
     public interface Dropper {
-        int MOTOR = 0;
+        int MOTOR = 20;
     }
 }

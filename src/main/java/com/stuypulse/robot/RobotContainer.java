@@ -77,7 +77,7 @@ public class RobotContainer {
                 .andThen(new DropperShootSequence()));
         
         driver.getTopButton()
-            .whileTrue(new AutoPilot());
+            .whileTrue(new AutoPilot().repeatedly());
     }
 
     /**************/

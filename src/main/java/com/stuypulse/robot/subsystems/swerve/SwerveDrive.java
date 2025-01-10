@@ -45,17 +45,17 @@ public class SwerveDrive extends SubsystemBase {
     static {
         if (RobotBase.isReal()) {
             instance = new SwerveDrive(
-                new SacrodModule(ModulePosition.FRONT_RIGHT),
                 new SacrodModule(ModulePosition.FRONT_LEFT),
                 new SacrodModule(ModulePosition.BACK_LEFT),
-                new SacrodModule(ModulePosition.BACK_RIGHT)
+                new SacrodModule(ModulePosition.BACK_RIGHT),
+                new SacrodModule(ModulePosition.FRONT_RIGHT)
             );
         } else {
             instance = new SwerveDrive(
-                new SimModule(ModulePosition.FRONT_RIGHT),
                 new SimModule(ModulePosition.FRONT_LEFT),
                 new SimModule(ModulePosition.BACK_LEFT),
-                new SimModule(ModulePosition.BACK_RIGHT)
+                new SimModule(ModulePosition.BACK_RIGHT),
+                new SimModule(ModulePosition.FRONT_RIGHT)
             );
         }
     }
