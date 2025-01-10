@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.vision;
 
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.util.vision.VisionData;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,7 +12,17 @@ public abstract class AprilTagVision extends SubsystemBase {
     private static final AprilTagVision instance;
 
     static {
-        instance = new PhotonVision();
+        switch (Settings.Vision.VISION_TYPE) {
+            case LIMELIGHT:
+                instance = new LimelightVision();
+                break;
+            case PHOTON_VISION:
+                instance = new PhotonVision();
+                break;
+            default:
+                instance = new PhotonVision();
+                break;
+        }
     }
 
     public static AprilTagVision getInstance() {

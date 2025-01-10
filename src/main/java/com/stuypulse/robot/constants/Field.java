@@ -14,11 +14,7 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 /** This interface stores information about the field elements. */
 public interface Field {
@@ -153,6 +149,10 @@ public interface Field {
             }
         }
         return null;
+    }
+
+    public static boolean isValidAprilTagId(int id) {
+        return id >= 1 && id <= 22;
     }
 
     /*** REEF POSITIONS ***/

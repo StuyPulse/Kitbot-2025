@@ -35,23 +35,23 @@ public class PhotonVision extends AprilTagVision {
     private final FieldObject2d robot;
 
     protected PhotonVision() {
-        this.cameras = new PhotonCamera[Cameras.APRILTAG_CAMERAS.length];
-        for (int i = 0; i < Cameras.APRILTAG_CAMERAS.length; i++) {
-            cameras[i] = new PhotonCamera(Cameras.APRILTAG_CAMERAS[i].getName());
+        this.cameras = new PhotonCamera[Cameras.PhotonVisionCameras.length];
+        for (int i = 0; i < Cameras.PhotonVisionCameras.length; i++) {
+            cameras[i] = new PhotonCamera(Cameras.PhotonVisionCameras[i].getName());
         }
 
-        enabled = new boolean[Cameras.APRILTAG_CAMERAS.length];
+        enabled = new boolean[Cameras.PhotonVisionCameras.length];
 
         for (int i = 0; i < enabled.length; i++) {
             enabled[i] = true;
         }
 
-        poseEstimators = new PhotonPoseEstimator[Cameras.APRILTAG_CAMERAS.length];
-        for (int i = 0; i < Cameras.APRILTAG_CAMERAS.length; i++) {
+        poseEstimators = new PhotonPoseEstimator[Cameras.PhotonVisionCameras.length];
+        for (int i = 0; i < Cameras.PhotonVisionCameras.length; i++) {
             poseEstimators[i] = new PhotonPoseEstimator(
                 AprilTagFieldLayout.loadField(AprilTagFields.k2024Crescendo), 
                 PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, 
-                Cameras.APRILTAG_CAMERAS[i].getLocation().minus(new Pose3d())
+                Cameras.PhotonVisionCameras[i].getLocation().minus(new Pose3d())
                 );
         }
 
@@ -84,7 +84,7 @@ public class PhotonVision extends AprilTagVision {
 
     @Override
     public void setCameraEnabled(String name, boolean enabled) {
-        for (int i = 0; i < Cameras.APRILTAG_CAMERAS.length; i++) {
+        for (int i = 0; i < Cameras.PhotonVisionCameras.length; i++) {
             if (cameras[i].getName().equals(name)) {
                 this.enabled[i] = enabled;
             }
@@ -121,7 +121,7 @@ public class PhotonVision extends AprilTagVision {
                 if (latestResult.hasTargets()) {
                     estimatedRobotPose.ifPresent(
                         (EstimatedRobotPose robotPose) -> {
-                            VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds, latestResult.getBestTarget().getArea());
+                            VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds);
                             outputs.add(data);
                             updateTelemetry("Vision/" + cameras[index].getName(), data);
                         }

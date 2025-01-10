@@ -1,19 +1,22 @@
 package com.stuypulse.robot.constants;
 
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Rotation3d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.geometry.Translation3d;
-import edu.wpi.first.math.util.Units;
 
 /** This interface stores information about each camera. */
 public interface Cameras {
 
-    public CameraInfo[] APRILTAG_CAMERAS = new CameraInfo[] {
+    public CameraInfo[] PhotonVisionCameras = new CameraInfo[] {
         new CameraInfo("camera 1 placeholder", new Pose3d()),
         new CameraInfo("camera 2 placeholder", new Pose3d()),
         new CameraInfo("camera 3 placeholder", new Pose3d()),
     };
+
+    public CameraInfo[] LimelightCameras = new CameraInfo[] {
+        new CameraInfo("camera 1 placeholder", new Pose3d()),
+        new CameraInfo("camera 2 placeholder", new Pose3d()),
+        new CameraInfo("camera 3 placeholder", new Pose3d()),
+    };
+    
 
     public static class CameraInfo {
         private String name;

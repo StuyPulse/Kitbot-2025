@@ -182,6 +182,13 @@ public interface Settings {
     }
 
     public interface Vision {
+        public enum VisionType {
+            PHOTON_VISION,
+            LIMELIGHT
+        }
+
+        VisionType VISION_TYPE = VisionType.LIMELIGHT;
+        
         double POSE_AMBIGUITY_RATIO_THRESHOLD = 0.60;
         Vector<N3> STDDEVS = VecBuilder.fill(0.3, 0.3, Math.toRadians(30));
     }

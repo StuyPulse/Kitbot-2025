@@ -204,12 +204,16 @@ public class SwerveDrive extends SubsystemBase {
         return gyro.getRotation2d();
     }
 
-    public Rotation2d getGyroPitch() {
-        return Rotation2d.fromDegrees(gyro.getPitch());
+    public double getGyroYaw() {
+        return gyro.getYaw();
     }
 
-    public Rotation2d getGyroRoll() {
-        return Rotation2d.fromDegrees(gyro.getRoll());
+    public double getGyroPitch() {
+        return gyro.getPitch();
+    }
+
+    public double getGyroRoll() {
+        return gyro.getRoll();
     }
 
     /** KINEMATICS **/
@@ -240,9 +244,9 @@ public class SwerveDrive extends SubsystemBase {
             ));
         }
 
-        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroAngle().getDegrees());
-        SmartDashboard.putNumber("Swerve/Gyro Pitch", getGyroPitch().getDegrees());
-        SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll().getDegrees());
+        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroPitch());
+        SmartDashboard.putNumber("Swerve/Gyro Pitch (deg)", getGyroPitch());
+        SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll());
 
         SmartDashboard.putNumber("Swerve/X Acceleration (Gs)", gyro.getWorldLinearAccelX());
         SmartDashboard.putNumber("Swerve/Y Acceleration (Gs)", gyro.getWorldLinearAccelY());
