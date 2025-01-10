@@ -90,7 +90,7 @@ public class SimModule extends SwerveModule {
 
         turnSim = new LinearSystemSim<>(LinearSystemId.identifyPositionSystem(0.25, 0.007));
 
-        driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Modules.Drive.kV, Modules.Drive.kA));
+        driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Modules.Drive.kV.get(), Modules.Drive.kA.get()));
     }
 
     @Override

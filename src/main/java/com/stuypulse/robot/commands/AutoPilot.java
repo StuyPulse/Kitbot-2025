@@ -21,7 +21,7 @@ public class AutoPilot extends SequentialCommandGroup{
                 SwervePathFind.toPose(Field.getTargetPoseForCoralBranch(branch)),
                 new DropperShootSequence(),
                 SwervePathFind.toNearestCoralStation(),
-                new WaitCommand(Settings.WAIT_TIME_AT_CORAL_STATION)
+                new WaitCommand(Settings.Dropper.WAIT_TIME_AT_CORAL_STATION)
             );
             commands.add(command);
         }

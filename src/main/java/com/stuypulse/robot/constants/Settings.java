@@ -29,13 +29,12 @@ public interface Settings {
     double WIDTH = Units.inchesToMeters(0); // intake side 
     double LENGTH = Units.inchesToMeters(0);
 
-    double WAIT_TIME_AT_CORAL_STATION = 0.75;
-
     public interface Dropper {
-        double DROP_SPEED = 0.1;
-        double DROP_TIME = 0.75;
+        double DROP_SPEED = 0.5;
+        double REVERSE_SPEED = 0.5;
 
-        double REVERSE_SPEED = 0.1;
+        double DROP_TIME = 0.75;
+        double WAIT_TIME_AT_CORAL_STATION = 0.75;
     }
     
     public interface Swerve {
@@ -58,9 +57,9 @@ public interface Settings {
                 MAX_ANGULAR_ACCEL);
         
         public interface Alignment {
-            double X_TOLERANCE = 0.1; // meters
-            double Y_TOLERANCE = 0.1; // meters
-            double THETA_TOLERANCE = 0.1; // radians
+            SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.1);
+            SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.1);
+            SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Theta Tolerance (rad)", 0.1);
 
             double XY_DEBOUNCE = 0.1;
             double THETA_DEBOUNCE = 0.1;
@@ -143,39 +142,40 @@ public interface Settings {
                         return new PIDController(kP, kI, kD);
                     }
                     public static PIDConstants getConstants() {
-                        return new PIDConstants(kP, kI, kD);
+                        return new PIDConstants(kP.get(), kI.get(), kD.get());
                     }
-                    double kP = 3.0;
-                    double kI = 0.0;
-                    double kD = 0.0;
+
+                    SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 3.0);
+                    SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/XY/kI", 0.0);
+                    SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.0);
                 }
                 public interface Theta {
                     public static Controller getController() {
                         return new PIDController(kP, kI, kD);
                     }
                     public static PIDConstants getConstants() {
-                        return new PIDConstants(kP, kI, kD);
+                        return new PIDConstants(kP.get(), kI.get(), kD.get());
                     }
-                    double kP = 3.0;
-                    double kI = 0.0;
-                    double kD = 0.0;
+                    SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 3.0);
+                    SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/Theta/kI", 0.0);
+                    SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.0);
                 }
             }
             public interface Modules {
                 public interface Turn {
-                    double kP = 3.5;
-                    double kI = 0.0;
-                    double kD = 0.1;
+                    SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Turn/kP", 3.5);
+                    SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Turn/kI", 0.0);
+                    SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Turn/kD", 0.1);
                 }
             
                 public interface Drive {
-                    double kP = 1.3;
-                    double kI = 0.0;
-                    double kD = 0.0;
+                    SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 1.3);
+                    SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Drive/kI", 0.0);
+                    SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.0);
             
-                    double kS = 0.17335;
-                    double kV = 2.7274;
-                    double kA = 0.456;
+                    SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.17335);
+                    SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7274);
+                    SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.456);
                 }
             }
         }

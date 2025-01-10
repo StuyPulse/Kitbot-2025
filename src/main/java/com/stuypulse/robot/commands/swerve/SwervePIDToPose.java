@@ -39,10 +39,10 @@ public class SwervePIDToPose extends Command {
 
     private final FieldObject2d targetPose2d;
 
-    private double xTolerance;
-    private double yTolerance;
-    private double thetaTolerance;
-    private double velocityTolerance;
+    private Number xTolerance;
+    private Number yTolerance;
+    private Number thetaTolerance;
+    private Number velocityTolerance;
 
     private Pose2d targetPose;
 
@@ -103,9 +103,9 @@ public class SwervePIDToPose extends Command {
     }
 
     public SwervePIDToPose withTolerance(Number x, Number y, Number theta) {
-        xTolerance = x.doubleValue();
-        yTolerance = y.doubleValue();
-        thetaTolerance = theta.doubleValue();
+        xTolerance = x;
+        yTolerance = y;
+        thetaTolerance = theta;
         return this;
     }
 
@@ -115,8 +115,8 @@ public class SwervePIDToPose extends Command {
     }
 
     private boolean isAligned() {
-        return controller.isDone(xTolerance, yTolerance, Math.toDegrees(thetaTolerance))
-            && velocityError.get() < velocityTolerance;
+        return controller.isDone(xTolerance.doubleValue(), yTolerance.doubleValue(), Math.toDegrees(thetaTolerance.doubleValue()))
+            && velocityError.get() < velocityTolerance.doubleValue();
     }
 
     @Override
@@ -130,7 +130,7 @@ public class SwervePIDToPose extends Command {
         
         SmartDashboard.putNumber("Alignment/Translation Target Speed", speed.distance());
 
-        if (Math.abs(rotation) < Swerve.Alignment.THETA_TOLERANCE)
+        if (Math.abs(rotation) < Swerve.Alignment.THETA_TOLERANCE.get())
             rotation = 0;
 
         ChassisSpeeds clamped = new ChassisSpeeds(
