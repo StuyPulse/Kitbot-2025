@@ -13,9 +13,7 @@ import java.util.Optional;
 public class Limelight extends SubsystemBase{
 
     private String name;
-
     private Optional<VisionData> data;
-    
     private boolean enabled;
 
     public Limelight(String name, Pose3d robotRelativePose) {
@@ -34,6 +32,9 @@ public class Limelight extends SubsystemBase{
         data = Optional.empty();
 
         enabled = true;
+
+        int[] whitelist = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
+        LimelightHelpers.SetFiducialIDFiltersOverride(name, whitelist);
     }
 
     public Optional<VisionData> getData() {
@@ -46,6 +47,10 @@ public class Limelight extends SubsystemBase{
 
     public String getName() {
         return name;
+    }
+
+    public void setTagWhitelist(int... ids) {
+        LimelightHelpers.SetFiducialIDFiltersOverride(name, ids);
     }
 
     public void setEnabled(boolean enabled) {

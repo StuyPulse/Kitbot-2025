@@ -26,7 +26,8 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 public class PhotonVision extends AprilTagVision {
 
     private final PhotonCamera[] cameras;
-    private final boolean[] enabled;
+    private final boolean[] enabledCameras;
+    private boolean visionEnabled;
     private final PhotonPoseEstimator[] poseEstimators;
     private final ArrayList<VisionData> outputs;
 
@@ -40,11 +41,11 @@ public class PhotonVision extends AprilTagVision {
             cameras[i] = new PhotonCamera(Cameras.PhotonVisionCameras[i].getName());
         }
 
-        enabled = new boolean[Cameras.PhotonVisionCameras.length];
-
-        for (int i = 0; i < enabled.length; i++) {
-            enabled[i] = true;
+        enabledCameras = new boolean[Cameras.PhotonVisionCameras.length];
+        for (int i = 0; i < enabledCameras.length; i++) {
+            enabledCameras[i] = true;
         }
+        visionEnabled = true;
 
         poseEstimators = new PhotonPoseEstimator[Cameras.PhotonVisionCameras.length];
         for (int i = 0; i < Cameras.PhotonVisionCameras.length; i++) {
@@ -55,7 +56,7 @@ public class PhotonVision extends AprilTagVision {
                 );
         }
 
-        whitelist = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};
+        whitelist = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22};
 
         outputs = new ArrayList<VisionData>();
 
@@ -81,12 +82,22 @@ public class PhotonVision extends AprilTagVision {
     public void setTagWhitelist(int... ids) {
         whitelist = ids;
     }
+    
+    @Override
+    public void enable() {
+        visionEnabled = true;
+    }
+
+    @Override
+    public void disable() {
+        visionEnabled = false;
+    }
 
     @Override
     public void setCameraEnabled(String name, boolean enabled) {
         for (int i = 0; i < Cameras.PhotonVisionCameras.length; i++) {
             if (cameras[i].getName().equals(name)) {
-                this.enabled[i] = enabled;
+                this.enabledCameras[i] = enabled;
             }
         }
     }
@@ -114,16 +125,18 @@ public class PhotonVision extends AprilTagVision {
 
         for (int i = 0; i < cameras.length; i++) {
             final int index = i;
-            if (enabled[index]) {
+            if (enabledCameras[index]) {
                 PhotonPipelineResult latestResult = cameras[index].getLatestResult();
                 filterResult(latestResult);
                 Optional<EstimatedRobotPose> estimatedRobotPose = poseEstimators[index].update(latestResult);
                 if (latestResult.hasTargets()) {
                     estimatedRobotPose.ifPresent(
                         (EstimatedRobotPose robotPose) -> {
-                            VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds);
-                            outputs.add(data);
-                            updateTelemetry("Vision/" + cameras[index].getName(), data);
+                            if (visionEnabled) {
+                                VisionData data = new VisionData(robotPose.estimatedPose, getIDs(latestResult), robotPose.timestampSeconds);
+                                outputs.add(data);
+                                updateTelemetry("Vision/" + cameras[index].getName(), data);
+                            }
                         }
                     );
                 }

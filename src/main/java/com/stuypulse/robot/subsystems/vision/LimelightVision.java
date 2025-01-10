@@ -13,6 +13,8 @@ public class LimelightVision extends AprilTagVision{
     private ArrayList<VisionData> outputs;
     private Limelight[] limelights;
 
+    private boolean enabled;
+
     public LimelightVision() {
         limelights = new Limelight[Cameras.LimelightCameras.length];
         for (int i = 0; i < limelights.length; i++) {
@@ -20,6 +22,8 @@ public class LimelightVision extends AprilTagVision{
         }
 
         outputs = new ArrayList<VisionData>();
+
+        enabled = true;
     }
 
     @Override
@@ -29,8 +33,19 @@ public class LimelightVision extends AprilTagVision{
 
     @Override
     public void setTagWhitelist(int... ids) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'setTagWhitelist'");
+        for (Limelight limelight : limelights) {
+            limelight.setTagWhitelist(ids);
+        }
+    }
+
+    @Override
+    public void enable() {
+        enabled = true;
+    }
+
+    @Override
+    public void disable() {
+        enabled = false;
     }
 
     @Override
@@ -46,9 +61,11 @@ public class LimelightVision extends AprilTagVision{
     public void periodic() {
         outputs.clear();
 
-        for (Limelight limelight : limelights) {
-            if (limelight.hasData()) {
-                outputs.add(limelight.getData().get());
+        if (enabled) {
+            for (Limelight limelight : limelights) {
+                if (limelight.hasData()) {
+                    outputs.add(limelight.getData().get());
+                }
             }
         }
 
