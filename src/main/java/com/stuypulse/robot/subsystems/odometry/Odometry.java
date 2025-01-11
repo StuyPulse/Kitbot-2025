@@ -1,7 +1,5 @@
 package com.stuypulse.robot.subsystems.odometry;
 
-import com.stuypulse.stuylib.network.SmartBoolean;
-
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -38,4 +36,6 @@ public abstract class Odometry extends SubsystemBase {
     public final Rotation2d getRotation() {
         return getPose().getRotation();
     }
+
+    public abstract void addVisionData(Pose2d robotPose, double timestamp);
 }

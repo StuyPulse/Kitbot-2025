@@ -4,10 +4,7 @@ import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
 import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.ControllerGroup;
-import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
-import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartNumber;
 
@@ -181,15 +178,7 @@ public interface Settings {
         }
     }
 
-    public interface Vision {
-        public enum VisionType {
-            PHOTON_VISION,
-            LIMELIGHT
-        }
-
-        VisionType VISION_TYPE = VisionType.LIMELIGHT;
-        
-        double POSE_AMBIGUITY_RATIO_THRESHOLD = 0.60;
+    public interface Vision {        
         Vector<N3> STDDEVS = VecBuilder.fill(0.3, 0.3, Math.toRadians(30));
     }
 

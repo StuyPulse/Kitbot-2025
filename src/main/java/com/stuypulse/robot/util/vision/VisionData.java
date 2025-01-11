@@ -2,16 +2,16 @@ package com.stuypulse.robot.util.vision;
 
 import com.stuypulse.robot.constants.Field;
 
-import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Pose2d;
 
 /** This class stores pieces of data from the vision system. */
 public class VisionData {
 
-    private final Pose3d outputPose;
+    private final Pose2d outputPose;
     private final int[] ids;
     private final double timestamp;
 
-    public VisionData(Pose3d outputPose, int[] ids, double timestamp) {
+    public VisionData(Pose2d outputPose, int[] ids, double timestamp) {
         this.outputPose = outputPose;
         this.ids = ids;
         this.timestamp = timestamp;
@@ -22,7 +22,7 @@ public class VisionData {
      *
      * @return the pose of the robot relative to the field
      */
-    public Pose3d getPose() {
+    public Pose2d getPose() {
         return outputPose;
     }
 
@@ -42,27 +42,6 @@ public class VisionData {
      */
     public double getTimestamp() {
         return timestamp;
-    }
-
-    /**
-     * Returns the distance to the primary tag in each vision data entry.
-     *
-     * @param id the tag ID
-     * @return the distance to the primary tag
-     */
-    public double getDistanceToPrimaryTag() {
-        return outputPose
-            .getTranslation()
-            .getDistance(Field.getTag(getPrimaryID()).getLocation().getTranslation());
-    }
-
-    /**
-     * Returns the primary tag ID (first id).
-     *
-     * @return the primary tag ID
-     */
-    public int getPrimaryID() {
-        return ids.length == 0 ? -1 : ids[0];
     }
 
     /**
@@ -92,10 +71,6 @@ public class VisionData {
         if (Double.isNaN(outputPose.getY())
                 || outputPose.getY() < 0
                 || outputPose.getY() > Field.WIDTH)
-            return false;
-        if (Double.isNaN(outputPose.getZ())
-                || outputPose.getZ() < -1
-                || outputPose.getZ() > 1)
             return false;
 
         return true;

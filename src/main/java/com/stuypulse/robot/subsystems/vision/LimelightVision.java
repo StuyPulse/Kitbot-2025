@@ -1,40 +1,47 @@
 package com.stuypulse.robot.subsystems.vision;
 
 import com.stuypulse.robot.constants.Cameras;
-import com.stuypulse.robot.util.vision.Limelight;
-import com.stuypulse.robot.util.vision.VisionData;
+import com.stuypulse.robot.subsystems.odometry.Odometry;
+import com.stuypulse.robot.util.vision.LimelightHelpers;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import java.util.ArrayList;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Translation2d;
 
 public class LimelightVision extends AprilTagVision{
 
-    private ArrayList<VisionData> outputs;
-    private Limelight[] limelights;
-
+    private String[] names;
     private boolean enabled;
+    private boolean[] camerasEnabled;
 
     public LimelightVision() {
-        limelights = new Limelight[Cameras.LimelightCameras.length];
-        for (int i = 0; i < limelights.length; i++) {
-            limelights[i] = new Limelight(Cameras.LimelightCameras[i].getName(), Cameras.LimelightCameras[i].getLocation());
+        names = new String[Cameras.LimelightCameras.length];
+        for (int i = 0; i < Cameras.LimelightCameras.length; i++) {
+            names[i] = Cameras.LimelightCameras[i].getName();
+            Pose3d robotRelativePose = Cameras.LimelightCameras[i].getLocation();
+            LimelightHelpers.setCameraPose_RobotSpace(
+                names[i], 
+                robotRelativePose.getX(), 
+                robotRelativePose.getY(), 
+                robotRelativePose.getZ(), 
+                robotRelativePose.getRotation().getX(), 
+                robotRelativePose.getRotation().getY(), 
+                robotRelativePose.getRotation().getZ()
+            );
         }
 
-        outputs = new ArrayList<VisionData>();
+        camerasEnabled = new boolean[Cameras.LimelightCameras.length];
+        for (int i = 0; i < camerasEnabled.length; i++) {
+            camerasEnabled[i] = true;
+        }
 
         enabled = true;
     }
 
     @Override
-    public ArrayList<VisionData> getOutputs() {
-        return outputs;
-    }
-
-    @Override
     public void setTagWhitelist(int... ids) {
-        for (Limelight limelight : limelights) {
-            limelight.setTagWhitelist(ids);
+        for (String name : names) {
+            LimelightHelpers.SetFiducialIDFiltersOverride(name, ids);
         }
     }
 
@@ -50,25 +57,28 @@ public class LimelightVision extends AprilTagVision{
 
     @Override
     public void setCameraEnabled(String name, boolean enabled) {
-        for (Limelight limelight : limelights) {
-            if (limelight.getName().equals(name)) {
-                limelight.setEnabled(enabled);
+        for (int i = 0; i < names.length; i++) {
+            if (names[i].equals(name)) {
+                camerasEnabled[i] = enabled;
             }
         }
     }
 
     @Override
     public void periodic() {
-        outputs.clear();
-
         if (enabled) {
-            for (Limelight limelight : limelights) {
-                if (limelight.hasData()) {
-                    outputs.add(limelight.getData().get());
+            for (int i = 0; i < names.length; i++) {
+                if (camerasEnabled[i]) {
+                    String limelightName = names[i];
+                    Pose2d robotPose = LimelightHelpers.getBotPose2d(limelightName);
+                    double timestamp = LimelightHelpers.getLatestResults(limelightName).timestamp_LIMELIGHT_publish;
+
+                    if (robotPose.getTranslation().getDistance(new Translation2d()) != 0) {
+                        Odometry.getInstance().addVisionData(robotPose, timestamp);
+                    }
                 }
             }
         }
-
-        SmartDashboard.putBoolean("Vision/Has Any Data", outputs.size() > 0);
     }
 }
+ 

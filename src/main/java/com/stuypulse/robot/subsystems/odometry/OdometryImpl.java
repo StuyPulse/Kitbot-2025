@@ -2,8 +2,6 @@ package com.stuypulse.robot.subsystems.odometry;
 
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
-import com.stuypulse.robot.subsystems.vision.AprilTagVision;
-import com.stuypulse.robot.util.vision.VisionData;
 
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -12,8 +10,6 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
-import java.util.List;
 
 public class OdometryImpl extends Odometry {
     private final SwerveDrivePoseEstimator poseEstimator;
@@ -67,10 +63,9 @@ public class OdometryImpl extends Odometry {
         return field;
     }
 
-    private void processResults(List<VisionData> results){
-        for (VisionData result : results) {
-            poseEstimator.addVisionMeasurement(result.getPose().toPose2d(), result.getTimestamp());
-        }
+    @Override
+    public void addVisionData(Pose2d robotPose, double timestamp) {
+        poseEstimator.addVisionMeasurement(robotPose, timestamp);
     }
 
     @Override
@@ -79,10 +74,6 @@ public class OdometryImpl extends Odometry {
         poseEstimator.update(drive.getGyroAngle(), drive.getModulePositions());
 
         poseEstimatorPose2d.setPose(poseEstimator.getEstimatedPosition());
-
-        AprilTagVision vision = AprilTagVision.getInstance();
-        List<VisionData> results = vision.getOutputs();
-        processResults(results);
 
         SmartDashboard.putNumber("Odometry/Pose Estimator Pose X", poseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("Odometry/Pose Estimator Pose Y", poseEstimator.getEstimatedPosition().getY());
