@@ -4,10 +4,12 @@ import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
+import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightVision extends AprilTagVision{
 
@@ -71,12 +73,13 @@ public class LimelightVision extends AprilTagVision{
             for (int i = 0; i < names.length; i++) {
                 if (camerasEnabled[i]) {
                     String limelightName = names[i];
-                    Pose2d robotPose = Robot.isBlue() 
-                        ? LimelightHelpers.getBotPose2d_wpiBlue(limelightName)
-                        : LimelightHelpers.getBotPose2d_wpiRed(limelightName);
-                    double timestamp = LimelightHelpers.getLatestResults(limelightName).timestamp_LIMELIGHT_publish;
+                    PoseEstimate poseEstimate = Robot.isBlue() 
+                        ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
+                        : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
 
-                    if (robotPose.getTranslation().getDistance(new Translation2d()) != 0) {
+                    if (poseEstimate.tagCount > 0) {
+                        Pose2d robotPose = poseEstimate.pose;
+                        double timestamp = poseEstimate.timestampSeconds;
                         Odometry.getInstance().addVisionData(robotPose, timestamp);
                     }
                 }

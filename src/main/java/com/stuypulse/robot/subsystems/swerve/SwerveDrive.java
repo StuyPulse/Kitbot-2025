@@ -113,6 +113,7 @@ public class SwerveDrive extends SubsystemBase {
     public void initFieldObjects(Field2d field) {
         for (int i = 0; i < modules.length; i++) {
             module2ds[i] = field.getObject(modules[i].getName()+"-2d");
+            module2ds[i].setPose(Robot.isBlue() ? module2ds[i].getPose() : Field.transformToOppositeAlliance(module2ds[i].getPose()));
         }
     }
 

@@ -19,10 +19,6 @@ public abstract class Odometry extends SubsystemBase {
         return instance;
     }
 
-    // Odometry methods
-    protected Odometry() {
-    }
-
     public abstract Field2d getField();
 
     public abstract void reset(Pose2d pose2d);

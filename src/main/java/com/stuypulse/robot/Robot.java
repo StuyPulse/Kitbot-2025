@@ -34,7 +34,6 @@ public class Robot extends TimedRobot {
     @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
-        Field.setTargetPosesForCoralBranchesToField(); // call every periodic in case of alliance change
     }
 
     /*********************/
