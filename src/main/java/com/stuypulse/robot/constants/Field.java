@@ -19,8 +19,8 @@ import java.util.ArrayList;
 /** This interface stores information about the field elements. */
 public interface Field {
 
-    double WIDTH = Units.inchesToMeters(0); 
-    double LENGTH = Units.inchesToMeters(0);
+    double WIDTH = Units.inchesToMeters(317.000); 
+    double LENGTH = Units.inchesToMeters(690.876);
 
     public static Pose3d transformToOppositeAlliance(Pose3d pose) {
         Pose3d rotated = pose.rotateBy(new Rotation3d(0, 0, Math.PI));
@@ -70,7 +70,9 @@ public interface Field {
         }
 
         public Pose3d getLocation() {
-            return tag.getLocation();
+            return Robot.isBlue()
+                ? tag.getLocation()
+                : transformToOppositeAlliance(tag.getLocation());
         }
 
         private NamedTags() {
@@ -111,35 +113,6 @@ public interface Field {
             }
         }
         return false;
-    }
-
-    public static AprilTag[] getApriltagLayout(int... ids) {
-        ArrayList<AprilTag> tags = new ArrayList<AprilTag>();
-
-        for (int id : ids) {
-            for (AprilTag tag : APRILTAGS) {
-                if (tag.getID() == id) {
-                    tags.add(tag);
-                }
-            }
-        }
-
-        AprilTag[] tags_array = new AprilTag[tags.size()];
-        return tags.toArray(tags_array);
-    }
-
-    public static double[] getLayoutAsDoubleArray(AprilTag[] tags) {
-        double[] layout = new double[tags.length * 7];
-        for (int i = 0; i < tags.length; i++) {
-            layout[i * 7 + 0] = tags[i].getID();
-            layout[i * 7 + 1] = tags[i].getLocation().getX();
-            layout[i * 7 + 2] = tags[i].getLocation().getY();
-            layout[i * 7 + 3] = tags[i].getLocation().getZ();
-            layout[i * 7 + 4] = tags[i].getLocation().getRotation().getX();
-            layout[i * 7 + 5] = tags[i].getLocation().getRotation().getY();
-            layout[i * 7 + 6] = tags[i].getLocation().getRotation().getZ();
-        }
-        return layout;
     }
 
     public static AprilTag getTag(int id) {
@@ -225,10 +198,11 @@ public interface Field {
         return targetPose;
     }
 
-    public static void addTargetPosesForCoralBranchesToField() {
+    public static void setTargetPosesForCoralBranchesToField() {
         for (CoralBranch branch : CoralBranch.values()) {
             Field2d field = Odometry.getInstance().getField();
-            field.getObject("Coral Branch " + branch.toString()).setPose(getTargetPoseForCoralBranch(branch));
+            Pose2d branchTargetPose = getTargetPoseForCoralBranch(branch);
+            field.getObject("Coral Branch " + branch.toString()).setPose(Robot.isBlue() ? branchTargetPose : transformToOppositeAlliance(branchTargetPose));
         }
     }
 

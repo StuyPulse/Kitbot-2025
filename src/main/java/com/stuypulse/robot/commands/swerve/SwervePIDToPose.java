@@ -3,6 +3,7 @@ package com.stuypulse.robot.commands.swerve;
 import java.util.function.Supplier;
 
 import com.pathplanner.lib.config.PIDConstants;
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings.Swerve;
 import com.stuypulse.robot.constants.Settings.Swerve.Alignment;
@@ -121,7 +122,7 @@ public class SwervePIDToPose extends Command {
 
     @Override
     public void execute() {
-        targetPose2d.setPose(targetPose);
+        targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
         controller.update(targetPose, odometry.getPose());
 
         Vector2D speed = new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond)

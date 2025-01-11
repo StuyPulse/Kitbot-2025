@@ -1,5 +1,7 @@
 package com.stuypulse.robot.subsystems.odometry;
 
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 
@@ -38,6 +40,7 @@ public class OdometryImpl extends Odometry {
         field = new Field2d();
 
         poseEstimatorPose2d = field.getRobotObject();
+        poseEstimatorPose2d.setPose(Robot.isBlue() ? new Pose2d() : Field.transformToOppositeAlliance(new Pose2d()));
 
         swerve.initFieldObjects(field);
         SmartDashboard.putData("Field", field);
@@ -73,7 +76,7 @@ public class OdometryImpl extends Odometry {
         SwerveDrive drive = SwerveDrive.getInstance();
         poseEstimator.update(drive.getGyroAngle(), drive.getModulePositions());
 
-        poseEstimatorPose2d.setPose(poseEstimator.getEstimatedPosition());
+        poseEstimatorPose2d.setPose(Robot.isBlue() ? poseEstimator.getEstimatedPosition() : Field.transformToOppositeAlliance(poseEstimator.getEstimatedPosition()));
 
         SmartDashboard.putNumber("Odometry/Pose Estimator Pose X", poseEstimator.getEstimatedPosition().getX());
         SmartDashboard.putNumber("Odometry/Pose Estimator Pose Y", poseEstimator.getEstimatedPosition().getY());

@@ -1,5 +1,6 @@
 package com.stuypulse.robot.subsystems.vision;
 
+import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Cameras;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
@@ -70,7 +71,9 @@ public class LimelightVision extends AprilTagVision{
             for (int i = 0; i < names.length; i++) {
                 if (camerasEnabled[i]) {
                     String limelightName = names[i];
-                    Pose2d robotPose = LimelightHelpers.getBotPose2d(limelightName);
+                    Pose2d robotPose = Robot.isBlue() 
+                        ? LimelightHelpers.getBotPose2d_wpiBlue(limelightName)
+                        : LimelightHelpers.getBotPose2d_wpiRed(limelightName);
                     double timestamp = LimelightHelpers.getLatestResults(limelightName).timestamp_LIMELIGHT_publish;
 
                     if (robotPose.getTranslation().getDistance(new Translation2d()) != 0) {

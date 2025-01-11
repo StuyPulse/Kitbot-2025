@@ -1,6 +1,8 @@
 package com.stuypulse.robot.subsystems.swerve;
 
 import com.stuypulse.stuylib.math.Vector2D;
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swerve;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
@@ -155,7 +157,8 @@ public class SwerveDrive extends SubsystemBase {
     /** MODULE STATES API **/
     public void drive(Vector2D velocity, double omega) {
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                velocity.y, -velocity.x,
+                velocity.y,
+                -velocity.x,
                 -omega,
                 Odometry.getInstance().getRotation());
 
@@ -238,10 +241,11 @@ public class SwerveDrive extends SubsystemBase {
         Rotation2d angle = odometry.getRotation();
 
         for (int i = 0; i < modules.length; ++i) {
-            module2ds[i].setPose(new Pose2d(
+            Pose2d modulePose = new Pose2d(
                 pose.getTranslation().plus(modules[i].getOffset().rotateBy(angle)),
                 modules[i].getState().angle.plus(angle)
-            ));
+            );
+            module2ds[i].setPose(Robot.isBlue() ? modulePose : Field.transformToOppositeAlliance(modulePose));
         }
 
         SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroPitch());
