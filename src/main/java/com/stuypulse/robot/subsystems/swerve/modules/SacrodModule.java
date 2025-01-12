@@ -11,6 +11,8 @@ import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Settings.Swerve.Controllers.Modules;
+import com.stuypulse.robot.constants.Settings.Swerve.ModuleOffsets.BackLeft;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
 
 import edu.wpi.first.math.MathUtil;
@@ -57,8 +59,9 @@ public class SacrodModule extends SwerveModule {
         this.location = Settings.Swerve.ModuleOffsets.getXYOffset(position);
         this.angleOffset = Settings.Swerve.ModuleOffsets.getAngleOffset(position);
 
-        this.driveController = Settings.Swerve.Controllers.Modules.getDriveController(position);
-        this.turnController = Settings.Swerve.Controllers.Modules.getTurnController(position);
+        this.driveController = new PIDController(Modules.Drive.kP, Modules.Drive.kI, Modules.Drive.kD)
+                                .add(new MotorFeedforward(Modules.Drive.kS, Modules.Drive.kV, Modules.Drive.kA).velocity());
+        this.turnController = new AnglePIDController(Modules.Turn.kP, Modules.Turn.kI, Modules.Turn.kD);
 
         targetState = new SwerveModuleState();
 

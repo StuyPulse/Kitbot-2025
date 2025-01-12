@@ -12,18 +12,15 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-
 import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Supplier;
 
 /** This interface stores information about the field elements. */
 public interface Field {
 
-    double WIDTH = Units.inchesToMeters(0); 
-    double LENGTH = Units.inchesToMeters(0);
+    double WIDTH = Units.inchesToMeters(317.000); 
+    double LENGTH = Units.inchesToMeters(690.876);
 
     public static Pose3d transformToOppositeAlliance(Pose3d pose) {
         Pose3d rotated = pose.rotateBy(new Rotation3d(0, 0, Math.PI));
@@ -73,7 +70,9 @@ public interface Field {
         }
 
         public Pose3d getLocation() {
-            return tag.getLocation();
+            return Robot.isBlue()
+                ? tag.getLocation()
+                : transformToOppositeAlliance(tag.getLocation());
         }
 
         private NamedTags() {
@@ -116,35 +115,6 @@ public interface Field {
         return false;
     }
 
-    public static AprilTag[] getApriltagLayout(int... ids) {
-        ArrayList<AprilTag> tags = new ArrayList<AprilTag>();
-
-        for (int id : ids) {
-            for (AprilTag tag : APRILTAGS) {
-                if (tag.getID() == id) {
-                    tags.add(tag);
-                }
-            }
-        }
-
-        AprilTag[] tags_array = new AprilTag[tags.size()];
-        return tags.toArray(tags_array);
-    }
-
-    public static double[] getLayoutAsDoubleArray(AprilTag[] tags) {
-        double[] layout = new double[tags.length * 7];
-        for (int i = 0; i < tags.length; i++) {
-            layout[i * 7 + 0] = tags[i].getID();
-            layout[i * 7 + 1] = tags[i].getLocation().getX();
-            layout[i * 7 + 2] = tags[i].getLocation().getY();
-            layout[i * 7 + 3] = tags[i].getLocation().getZ();
-            layout[i * 7 + 4] = tags[i].getLocation().getRotation().getX();
-            layout[i * 7 + 5] = tags[i].getLocation().getRotation().getY();
-            layout[i * 7 + 6] = tags[i].getLocation().getRotation().getZ();
-        }
-        return layout;
-    }
-
     public static AprilTag getTag(int id) {
         for (AprilTag tag : APRILTAGS) {
             if (tag.getID() == id) {
@@ -152,6 +122,10 @@ public interface Field {
             }
         }
         return null;
+    }
+
+    public static boolean isValidAprilTagId(int id) {
+        return id >= 1 && id <= 22;
     }
 
     /*** REEF POSITIONS ***/
@@ -219,9 +193,17 @@ public interface Field {
         }
     
         Pose2d targetPose = correspondingAprilTagPose.toPose2d()
-                                .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (position.isLeftPeg() ? -1 : 1), new Rotation2d()));
+                                .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (position.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
         
         return targetPose;
+    }
+
+    public static void setTargetPosesForCoralBranchesToField() {
+        for (CoralBranch branch : CoralBranch.values()) {
+            Field2d field = Odometry.getInstance().getField();
+            Pose2d branchTargetPose = getTargetPoseForCoralBranch(branch);
+            field.getObject("Coral Branch " + branch.toString()).setPose(Robot.isBlue() ? branchTargetPose : transformToOppositeAlliance(branchTargetPose));
+        }
     }
 
     /*** CORAL STATIONS ***/

@@ -23,6 +23,8 @@ public class DropperImpl extends Dropper {
             case DROPPING:
                 motor.set(Settings.Dropper.DROP_SPEED);
                 break;
+            case REVERSING:
+                motor.set(-Settings.Dropper.REVERSE_SPEED);
             case STOP:
                 motor.stopMotor();
                 break;

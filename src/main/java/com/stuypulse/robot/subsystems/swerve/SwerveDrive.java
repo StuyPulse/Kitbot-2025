@@ -1,6 +1,8 @@
 package com.stuypulse.robot.subsystems.swerve;
 
 import com.stuypulse.stuylib.math.Vector2D;
+import com.stuypulse.robot.Robot;
+import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.constants.Settings.Swerve;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
@@ -27,6 +29,8 @@ import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.pathfinding.Pathfinder;
+import com.pathplanner.lib.pathfinding.Pathfinding;
 import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class SwerveDrive extends SubsystemBase {
@@ -43,17 +47,17 @@ public class SwerveDrive extends SubsystemBase {
     static {
         if (RobotBase.isReal()) {
             instance = new SwerveDrive(
-                new SacrodModule(ModulePosition.FRONT_RIGHT),
                 new SacrodModule(ModulePosition.FRONT_LEFT),
                 new SacrodModule(ModulePosition.BACK_LEFT),
-                new SacrodModule(ModulePosition.BACK_RIGHT)
+                new SacrodModule(ModulePosition.BACK_RIGHT),
+                new SacrodModule(ModulePosition.FRONT_RIGHT)
             );
         } else {
             instance = new SwerveDrive(
-                new SimModule(ModulePosition.FRONT_RIGHT),
                 new SimModule(ModulePosition.FRONT_LEFT),
                 new SimModule(ModulePosition.BACK_LEFT),
-                new SimModule(ModulePosition.BACK_RIGHT)
+                new SimModule(ModulePosition.BACK_RIGHT),
+                new SimModule(ModulePosition.FRONT_RIGHT)
             );
         }
     }
@@ -100,7 +104,7 @@ public class SwerveDrive extends SubsystemBase {
                 instance
             );
 
-            PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
+            // PathPlannerLogging.setLogActivePathCallback((poses) -> Odometry.getInstance().getField().getObject("path").setPoses(poses));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -109,6 +113,7 @@ public class SwerveDrive extends SubsystemBase {
     public void initFieldObjects(Field2d field) {
         for (int i = 0; i < modules.length; i++) {
             module2ds[i] = field.getObject(modules[i].getName()+"-2d");
+            module2ds[i].setPose(Robot.isBlue() ? module2ds[i].getPose() : Field.transformToOppositeAlliance(module2ds[i].getPose()));
         }
     }
 
@@ -153,7 +158,8 @@ public class SwerveDrive extends SubsystemBase {
     /** MODULE STATES API **/
     public void drive(Vector2D velocity, double omega) {
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
-                velocity.y, -velocity.x,
+                velocity.y,
+                -velocity.x,
                 -omega,
                 Odometry.getInstance().getRotation());
 
@@ -202,12 +208,16 @@ public class SwerveDrive extends SubsystemBase {
         return gyro.getRotation2d();
     }
 
-    public Rotation2d getGyroPitch() {
-        return Rotation2d.fromDegrees(gyro.getPitch());
+    public double getGyroYaw() {
+        return gyro.getYaw();
     }
 
-    public Rotation2d getGyroRoll() {
-        return Rotation2d.fromDegrees(gyro.getRoll());
+    public double getGyroPitch() {
+        return gyro.getPitch();
+    }
+
+    public double getGyroRoll() {
+        return gyro.getRoll();
     }
 
     /** KINEMATICS **/
@@ -232,15 +242,16 @@ public class SwerveDrive extends SubsystemBase {
         Rotation2d angle = odometry.getRotation();
 
         for (int i = 0; i < modules.length; ++i) {
-            module2ds[i].setPose(new Pose2d(
+            Pose2d modulePose = new Pose2d(
                 pose.getTranslation().plus(modules[i].getOffset().rotateBy(angle)),
                 modules[i].getState().angle.plus(angle)
-            ));
+            );
+            module2ds[i].setPose(Robot.isBlue() ? modulePose : Field.transformToOppositeAlliance(modulePose));
         }
 
-        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroAngle().getDegrees());
-        SmartDashboard.putNumber("Swerve/Gyro Pitch", getGyroPitch().getDegrees());
-        SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll().getDegrees());
+        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroPitch());
+        SmartDashboard.putNumber("Swerve/Gyro Pitch (deg)", getGyroPitch());
+        SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll());
 
         SmartDashboard.putNumber("Swerve/X Acceleration (Gs)", gyro.getWorldLinearAccelX());
         SmartDashboard.putNumber("Swerve/Y Acceleration (Gs)", gyro.getWorldLinearAccelY());

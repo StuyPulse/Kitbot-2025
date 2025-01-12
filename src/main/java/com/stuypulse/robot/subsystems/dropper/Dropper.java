@@ -22,6 +22,7 @@ public abstract class Dropper extends SubsystemBase {
 
     public enum State {
         DROPPING,
+        REVERSING,
         STOP
     }
 
