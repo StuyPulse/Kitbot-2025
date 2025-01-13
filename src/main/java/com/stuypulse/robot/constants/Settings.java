@@ -23,8 +23,8 @@ import edu.wpi.first.math.util.Units;
 public interface Settings {
     double DT = 1.0 / 50.0;
 
-    double WIDTH = Units.inchesToMeters(0); // intake side 
-    double LENGTH = Units.inchesToMeters(0);
+    double WIDTH = Units.inchesToMeters(29); // intake side 
+    double LENGTH = Units.inchesToMeters(29);
 
     public interface Dropper {
         double DROP_SPEED = 0.5;
@@ -35,8 +35,8 @@ public interface Settings {
     }
     
     public interface Swerve {
-        double WIDTH = Units.inchesToMeters(22.984); // intake side 
-        double LENGTH = Units.inchesToMeters(22.984); 
+        double WIDTH = Units.inchesToMeters(22.213); // intake side 
+        double LENGTH = Units.inchesToMeters(22.213); 
 
         double MAX_LINEAR_VELOCITY = 4.9;
         double MAX_LINEAR_ACCEL = 15;

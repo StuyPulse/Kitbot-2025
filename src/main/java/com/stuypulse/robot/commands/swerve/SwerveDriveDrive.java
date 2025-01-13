@@ -2,6 +2,7 @@ package com.stuypulse.robot.commands.swerve;
 
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
+import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.stuylib.streams.numbers.IStream;
 import com.stuypulse.stuylib.streams.numbers.filters.LowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.VStream;
@@ -27,7 +28,7 @@ public class SwerveDriveDrive extends Command {
     public SwerveDriveDrive(Gamepad driver) {
         swerve = SwerveDrive.getInstance();
 
-        speed = VStream.create(driver::getLeftStick)
+        speed = VStream.create(this::getDriverInputAsVelocity)
             .filtered(
                 new VDeadZone(Drive.DEADBAND),
                 x -> x.clamp(1),
@@ -46,6 +47,10 @@ public class SwerveDriveDrive extends Command {
         this.driver = driver;
 
         addRequirements(swerve);
+    }
+
+    private Vector2D getDriverInputAsVelocity() {
+        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
     }
 
     @Override

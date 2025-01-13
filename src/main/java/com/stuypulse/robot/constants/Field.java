@@ -130,6 +130,7 @@ public interface Field {
 
     /*** REEF POSITIONS ***/
 
+    Translation2d REEF_CENTER = new Translation2d(Units.inchesToMeters(144.0 + 93.5 / 2), WIDTH / 2);
     double CENTER_OF_TROUGH_TO_BRANCH = Units.inchesToMeters(13.0/2.0);
 
     public enum CoralBranch {
@@ -153,6 +154,24 @@ public interface Field {
                 case E:
                 case G:
                 case I:
+                case K:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        /**  
+         * Represents the half of the reef facing the driver station.
+         * The other half is facing the barge / the opposite alliance
+        */
+        public boolean onDriverStationSide() {
+            switch (this) {
+                case A:
+                case B:
+                case C:
+                case D:
+                case L:
                 case K:
                     return true;
                 default:

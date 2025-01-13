@@ -158,8 +158,8 @@ public class SwerveDrive extends SubsystemBase {
     /** MODULE STATES API **/
     public void drive(Vector2D velocity, double omega) {
         ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+                velocity.x,
                 velocity.y,
-                -velocity.x,
                 -omega,
                 Odometry.getInstance().getRotation());
 

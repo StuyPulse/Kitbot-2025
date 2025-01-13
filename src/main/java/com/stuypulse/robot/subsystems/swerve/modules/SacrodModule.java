@@ -164,6 +164,5 @@ public class SacrodModule extends SwerveModule {
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Error", driveController.getError());
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Voltage", driveController.getOutput());
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Current", driveMotor.getOutputCurrent());
-
     }
 }
