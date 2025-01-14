@@ -20,11 +20,11 @@ public class AutoPilot extends SequentialCommandGroup {
         ArrayList<Command> commands = new ArrayList<>();
         for (CoralBranch branch : CoralBranch.values()) {
             Command command = new SequentialCommandGroup(
-                SwervePathFind.toPose(Field.getTargetPoseForCoralBranch(branch).transformBy(new Transform2d(-1.0, 0, new Rotation2d())))
+                SwervePathFind.toPose(branch.getTargetPose().transformBy(new Transform2d(-1.0, 0, new Rotation2d())))
                     .onlyIf(() -> !branch.onDriverStationSide()),
-                SwervePathFind.toPose(Field.getTargetPoseForCoralBranch(branch)),
+                SwervePathFind.toPose(branch.getTargetPose()),
                 new DropperShootSequence(),
-                SwervePathFind.toPose(Field.getTargetPoseForCoralBranch(branch).transformBy(new Transform2d(-1.0, 0, new Rotation2d())))
+                SwervePathFind.toPose(branch.getTargetPose().transformBy(new Transform2d(-1.0, 0, new Rotation2d())))
                     .onlyIf(() -> !branch.onDriverStationSide()),
                 SwervePathFind.toNearestCoralStation(),
                 new WaitCommand(Settings.Dropper.WAIT_TIME_AT_CORAL_STATION)

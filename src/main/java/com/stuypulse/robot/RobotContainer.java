@@ -68,14 +68,18 @@ public class RobotContainer {
         driver.getDPadUp().onTrue(new SeedFieldRelative());
 
         // manual shoot
-        driver.getRightTriggerButton()
+        driver.getRightBumper()
             .onTrue(new DropperDrop())
             .onFalse(new DropperStop());
         
         // align to closest coral and then shoot automatically
-        driver.getRightButton()
-            .whileTrue(new SwervePIDToPose(() -> Field.getTargetPoseForCoralBranch(Field.getClosestBranch()))
+        driver.getRightTriggerButton()
+            .whileTrue(new SwervePIDToPose(() -> Field.getClosestBranch().getTargetPose())
                 .andThen(new DropperShootSequence()));
+
+        // align to nearest algae
+        driver.getRightButton()
+            .whileTrue(new SwervePIDToPose(() -> Field.getClosestAlgaeBranch().getTargetPose()));
         
         driver.getTopButton()
             .whileTrue(new AutoPilot().repeatedly());

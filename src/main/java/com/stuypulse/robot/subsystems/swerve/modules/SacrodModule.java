@@ -90,6 +90,7 @@ public class SacrodModule extends SwerveModule {
     @Override
     public void setTargetState(SwerveModuleState state) {
         state.optimize(getRotation2d());
+        state.cosineScale(getRotation2d());
         targetState = state;
     }
 

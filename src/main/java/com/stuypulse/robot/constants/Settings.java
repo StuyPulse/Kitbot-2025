@@ -39,10 +39,10 @@ public interface Settings {
         double WIDTH = Units.inchesToMeters(22.213); // intake side 
         double LENGTH = Units.inchesToMeters(22.213); 
 
-        double MAX_LINEAR_VELOCITY = 4.9;
-        double MAX_LINEAR_ACCEL = 15;
+        double MAX_LINEAR_VELOCITY = 3.5;
+        double MAX_LINEAR_ACCEL = 8;
         double MAX_ANGULAR_VELOCITY = 6.75; // (rad/s)
-        double MAX_ANGULAR_ACCEL = 200.0; // (rad/s^2)
+        double MAX_ANGULAR_ACCEL = 100.0; // (rad/s^2)
 
         double MODULE_VELOCITY_DEADBAND = 0.02; // (m/s)
         double MAX_MODULE_SPEED = 5.0; // (m/s)
@@ -148,7 +148,7 @@ public interface Settings {
 
     public interface Driver {
         public interface Drive {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.03);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.05);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
@@ -158,7 +158,7 @@ public interface Settings {
         }
 
         public interface Turn {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.03);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.05);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);
