@@ -55,6 +55,13 @@ public class SwerveDriveDrive extends Command {
 
     @Override
     public void execute() {
-        swerve.drive(speed.get(), turn.get());
+        Vector2D velocity = speed.get();
+        double omega = turn.get();
+        if (velocity.magnitude() != 0 || omega != 0) {
+            swerve.drive(speed.get(), turn.get());
+        }
+        else {
+            swerve.setXMode();
+        }
     }
 }
