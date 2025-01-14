@@ -2,7 +2,6 @@ package com.stuypulse.robot.constants;
 
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
-import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
 import com.stuypulse.stuylib.control.Controller;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
@@ -27,6 +26,8 @@ public interface Settings {
     double LENGTH = Units.inchesToMeters(29);
 
     public interface Dropper {
+        boolean inverted = false;
+        
         double DROP_SPEED = 0.5;
         double REVERSE_SPEED = 0.5;
 
@@ -54,6 +55,18 @@ public interface Settings {
                 MAX_ANGULAR_ACCEL);
         
         public interface Alignment {
+            public interface XY {
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 3.0);
+                SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/XY/kI", 0.0);
+                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.0);
+            }
+
+            public interface Theta {
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 3.0);
+                SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/Theta/kI", 0.0);
+                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.0);
+            }
+
             SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.1);
             SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.1);
             SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Theta Tolerance (rad)", 0.1);
@@ -62,52 +75,22 @@ public interface Settings {
             double THETA_DEBOUNCE = 0.1;
         }
 
-        public interface ModuleOffsets {
-            public static Translation2d getXYOffset(ModulePosition position) {
-                switch (position) {
-                    case FRONT_LEFT:
-                        return FrontLeft.XY_OFFSET;
-                    case FRONT_RIGHT:
-                        return FrontRight.XY_OFFSET;
-                    case BACK_LEFT:
-                        return BackLeft.XY_OFFSET;
-                    case BACK_RIGHT:
-                        return BackRight.XY_OFFSET;
-                    default:
-                        throw new IllegalArgumentException("Not a valid swerve module position");
-                }
-            }
-            public static Angle getAngleOffset(ModulePosition position) {
-                switch (position) {
-                    case FRONT_LEFT:
-                        return FrontLeft.ANGLE_OFFSET;
-                    case FRONT_RIGHT:
-                        return FrontRight.ANGLE_OFFSET;
-                    case BACK_LEFT:
-                        return BackLeft.ANGLE_OFFSET;
-                    case BACK_RIGHT:
-                        return BackRight.ANGLE_OFFSET;
-                    default:
-                        throw new IllegalArgumentException("Not a valid swerve module position");
-                }
-            }
-            public interface FrontLeft {
-                Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
-                Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * +0.5);
-            }
-            public interface FrontRight {
-                Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
-                Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * -0.5);
-            }
-            public interface BackLeft {
-                Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
-                Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * +0.5);
-            }
-            public interface BackRight {
-                Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
-                Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * -0.5);
-            }
+        public interface Turn {
+            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Turn/kP", 3.5);
+            SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Turn/kI", 0.0);
+            SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Turn/kD", 0.1);
         }
+    
+        public interface Drive {
+            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 1.3);
+            SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Drive/kI", 0.0);
+            SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.0);
+    
+            SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.17335);
+            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7274);
+            SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.456);
+        }
+
         public interface Encoder {
             public interface Drive {
                 double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
@@ -132,49 +115,30 @@ public interface Settings {
                 double VELOCITY_CONVERSION = POSITION_CONVERSION / 60.0;
             }
         }
-        public interface Controllers {
-            public interface Chassis {
-                public interface XY {
-                    public static Controller getController() {
-                        return new PIDController(kP, kI, kD);
-                    }
-                    public static PIDConstants getConstants() {
-                        return new PIDConstants(kP.get(), kI.get(), kD.get());
-                    }
 
-                    SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 3.0);
-                    SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/XY/kI", 0.0);
-                    SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.0);
-                }
-                public interface Theta {
-                    public static Controller getController() {
-                        return new PIDController(kP, kI, kD);
-                    }
-                    public static PIDConstants getConstants() {
-                        return new PIDConstants(kP.get(), kI.get(), kD.get());
-                    }
-                    SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 3.0);
-                    SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/Theta/kI", 0.0);
-                    SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.0);
-                }
-            }
-            public interface Modules {
-                public interface Turn {
-                    SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Turn/kP", 3.5);
-                    SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Turn/kI", 0.0);
-                    SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Turn/kD", 0.1);
-                }
-            
-                public interface Drive {
-                    SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 1.3);
-                    SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Drive/kI", 0.0);
-                    SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.0);
-            
-                    SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.17335);
-                    SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7274);
-                    SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.456);
-                }
-            }
+        public interface FrontLeft {
+            boolean DRIVE_INVERTED = false;
+            boolean TURN_INVERTED = false;
+            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * +0.5);
+        }
+        public interface FrontRight {
+            boolean DRIVE_INVERTED = false;
+            boolean TURN_INVERTED = false;
+            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * -0.5);
+        }
+        public interface BackLeft {
+            boolean DRIVE_INVERTED = false;
+            boolean TURN_INVERTED = false;
+            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * +0.5);
+        }
+        public interface BackRight {
+            boolean DRIVE_INVERTED = false;
+            boolean TURN_INVERTED = false;
+            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * -0.5);
         }
     }
 

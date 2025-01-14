@@ -4,7 +4,15 @@ import com.stuypulse.stuylib.math.Vector2D;
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
+import com.stuypulse.robot.constants.Ports.Swerve.CANCoderIds;
+import com.stuypulse.robot.constants.Ports.Swerve.Drive;
+import com.stuypulse.robot.constants.Ports.Swerve.Turn;
 import com.stuypulse.robot.constants.Settings.Swerve;
+import com.stuypulse.robot.constants.Settings.Swerve.Alignment;
+import com.stuypulse.robot.constants.Settings.Swerve.BackLeft;
+import com.stuypulse.robot.constants.Settings.Swerve.BackRight;
+import com.stuypulse.robot.constants.Settings.Swerve.FrontLeft;
+import com.stuypulse.robot.constants.Settings.Swerve.FrontRight;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.subsystems.swerve.modules.SacrodModule;
 import com.stuypulse.robot.subsystems.swerve.modules.SimModule;
@@ -27,37 +35,28 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
-import com.pathplanner.lib.pathfinding.Pathfinder;
-import com.pathplanner.lib.pathfinding.Pathfinding;
-import com.pathplanner.lib.util.PathPlannerLogging;
 
 public class SwerveDrive extends SubsystemBase {
 
     private static final SwerveDrive instance;
 
-    public enum ModulePosition {
-        FRONT_RIGHT,
-        FRONT_LEFT,
-        BACK_LEFT,
-        BACK_RIGHT
-    }
-
     static {
         if (RobotBase.isReal()) {
             instance = new SwerveDrive(
-                new SacrodModule(ModulePosition.FRONT_LEFT),
-                new SacrodModule(ModulePosition.BACK_LEFT),
-                new SacrodModule(ModulePosition.BACK_RIGHT),
-                new SacrodModule(ModulePosition.FRONT_RIGHT)
+                new SacrodModule("Front Left", Drive.FRONT_LEFT, Turn.FRONT_LEFT, CANCoderIds.FRONT_LEFT, FrontLeft.XY_OFFSET, FrontLeft.ANGLE_OFFSET, FrontLeft.DRIVE_INVERTED, FrontLeft.TURN_INVERTED),
+                new SacrodModule("Back Left", Drive.BACK_LEFT, Turn.BACK_LEFT, CANCoderIds.BACK_LEFT, BackLeft.XY_OFFSET, BackLeft.ANGLE_OFFSET, BackLeft.DRIVE_INVERTED, BackLeft.TURN_INVERTED),
+                new SacrodModule("Back Right", Drive.BACK_RIGHT, Turn.BACK_RIGHT, CANCoderIds.BACK_RIGHT, BackRight.XY_OFFSET, BackRight.ANGLE_OFFSET, BackRight.DRIVE_INVERTED, BackRight.TURN_INVERTED),
+                new SacrodModule("Front Right", Drive.FRONT_RIGHT, Turn.FRONT_RIGHT, CANCoderIds.FRONT_RIGHT, FrontRight.XY_OFFSET, FrontRight.ANGLE_OFFSET, FrontRight.DRIVE_INVERTED, FrontRight.TURN_INVERTED)
             );
         } else {
             instance = new SwerveDrive(
-                new SimModule(ModulePosition.FRONT_LEFT),
-                new SimModule(ModulePosition.BACK_LEFT),
-                new SimModule(ModulePosition.BACK_RIGHT),
-                new SimModule(ModulePosition.FRONT_RIGHT)
+                new SimModule("Front Left", FrontLeft.XY_OFFSET),
+                new SimModule("Back Left", BackLeft.XY_OFFSET),
+                new SimModule("Back Right", BackRight.XY_OFFSET),
+                new SimModule("Front Right", FrontRight.XY_OFFSET)
             );
         }
     }
@@ -96,8 +95,8 @@ public class SwerveDrive extends SubsystemBase {
                 this::getChassisSpeeds,
                 (speeds, feedforwards) -> setChassisSpeeds(speeds),
                 new PPHolonomicDriveController(
-                    Settings.Swerve.Controllers.Chassis.XY.getConstants(), // Translation PID constants
-                    Settings.Swerve.Controllers.Chassis.Theta.getConstants() // Rotation PID constants
+                    new PIDConstants(Alignment.XY.kP.get(), Alignment.XY.kI.get(), Alignment.XY.kD.get()),
+                    new PIDConstants(Alignment.Theta.kP.get(), Alignment.Theta.kI.get(), Alignment.Theta.kD.get())
                 ),
                 RobotConfig.fromGUISettings(),
                 () -> false,

@@ -3,7 +3,6 @@ package com.stuypulse.robot.commands;
 import java.util.ArrayList;
 
 import com.stuypulse.robot.commands.dropper.DropperShootSequence;
-import com.stuypulse.robot.commands.swerve.SwerveDriveDriveAwayFromReef;
 import com.stuypulse.robot.commands.swerve.SwervePathFind;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
@@ -15,7 +14,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 
-public class AutoPilot extends SequentialCommandGroup{
+public class AutoPilot extends SequentialCommandGroup {
     
     public AutoPilot() {
         ArrayList<Command> commands = new ArrayList<>();

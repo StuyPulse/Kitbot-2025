@@ -10,11 +10,10 @@ import com.stuypulse.stuylib.control.angle.AngleController;
 import com.stuypulse.stuylib.control.angle.feedback.AnglePIDController;
 import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
-import com.stuypulse.stuylib.control.feedforward.VelocityFeedforwardController;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Swerve.Controllers.Modules;
-import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
+import com.stuypulse.robot.constants.Settings.Swerve.Drive;
+import com.stuypulse.robot.constants.Settings.Swerve.Turn;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.Nat;
@@ -76,21 +75,21 @@ public class SimModule extends SwerveModule {
     private Controller driveController;
     private AngleController turnController;
 
-    public SimModule(ModulePosition position) {
+    public SimModule(String name, Translation2d location) {
 
         // module data
-        this.name = position.toString();
-        this.location = Settings.Swerve.ModuleOffsets.getXYOffset(position);
+        this.name = name;
+        this.location = location;
 
-        this.driveController = new PIDController(Modules.Drive.kP, Modules.Drive.kI, Modules.Drive.kD)
-                                .add(new MotorFeedforward(Modules.Drive.kS, Modules.Drive.kV, Modules.Drive.kA).velocity());
-        this.turnController = new AnglePIDController(Modules.Turn.kP, Modules.Turn.kI, Modules.Turn.kD);
+        this.driveController = new PIDController(Drive.kP, Drive.kI, Drive.kD)
+                                .add(new MotorFeedforward(Drive.kS, Drive.kV, Drive.kA).velocity());
+        this.turnController = new AnglePIDController(Turn.kP, Turn.kI, Turn.kD);
 
         targetState = new SwerveModuleState();
 
         turnSim = new LinearSystemSim<>(LinearSystemId.identifyPositionSystem(0.25, 0.007));
 
-        driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Modules.Drive.kV.get(), Modules.Drive.kA.get()));
+        driveSim = new LinearSystemSim<>(identifyVelocityPositionSystem(Drive.kV.get(), Drive.kA.get()));
     }
 
     @Override
