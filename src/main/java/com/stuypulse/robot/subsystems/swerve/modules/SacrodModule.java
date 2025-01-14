@@ -106,7 +106,8 @@ public class SacrodModule extends SwerveModule {
     }
 
     private Rotation2d getRotation2d() {
-        return getAbsolutePosition().minus(angleOffset.getRotation2d());
+        // not sure why we have to multiply this by 2
+        return new Rotation2d(getAbsolutePosition().minus(angleOffset.getRotation2d()).getDegrees() * 2);
     }
 
     @Override
@@ -124,6 +125,7 @@ public class SacrodModule extends SwerveModule {
         turnMotor.setVoltage(turnController.update(
                 Angle.fromRotation2d(targetState.angle),
                 Angle.fromRotation2d(getRotation2d())));
+        
         driveMotor.setVoltage(driveController.update(targetState.speedMetersPerSecond, getSpeed()));
 
         SmartDashboard.putNumber("Swerve/" + name + "/Target Angle", targetState.angle.getDegrees());

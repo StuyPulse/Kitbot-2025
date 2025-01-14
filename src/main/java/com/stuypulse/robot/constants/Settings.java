@@ -119,25 +119,25 @@ public interface Settings {
         public interface FrontLeft {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(24.785156);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * +0.5);
         }
         public interface FrontRight {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(-85.913086);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * -0.5);
         }
         public interface BackLeft {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(26.762695);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * +0.5);
         }
         public interface BackRight {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(-23.686523);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * -0.5);
         }
     }
