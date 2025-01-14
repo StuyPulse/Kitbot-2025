@@ -28,9 +28,9 @@ public interface Ports {
         }
         public interface CANCoderIds {
             int FRONT_LEFT = 1;
-            int FRONT_RIGHT = 2;
-            int BACK_LEFT = 3;
-            int BACK_RIGHT = 4;
+            int BACK_LEFT = 2;
+            int BACK_RIGHT = 3;
+            int FRONT_RIGHT = 4;
         }
     }
 

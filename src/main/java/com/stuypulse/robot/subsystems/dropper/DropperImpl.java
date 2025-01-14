@@ -3,9 +3,11 @@ package com.stuypulse.robot.subsystems.dropper;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.SparkMax;
 import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Motors;
 import com.stuypulse.robot.constants.Ports;
 
 public class DropperImpl extends Dropper {
@@ -15,7 +17,8 @@ public class DropperImpl extends Dropper {
     public DropperImpl() {
         super();
         this.motor = new SparkMax(Ports.Dropper.MOTOR, MotorType.kBrushless);
-        motor.configure(Motors.Dropper.MOTOR, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+        SparkBaseConfig motorConfig = new SparkMaxConfig().inverted(Settings.Dropper.inverted).idleMode(IdleMode.kBrake);
+        motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
 
     private void setMotorBasedOnState() {

@@ -3,6 +3,7 @@ package com.stuypulse.robot.commands.swerve;
 import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.path.PathConstraints;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.odometry.Odometry;

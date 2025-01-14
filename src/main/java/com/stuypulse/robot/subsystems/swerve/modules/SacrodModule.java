@@ -7,21 +7,15 @@ import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.control.feedforward.MotorFeedforward;
 import com.stuypulse.stuylib.math.Angle;
 
-import com.stuypulse.robot.Robot;
-import com.stuypulse.robot.constants.Motors;
-import com.stuypulse.robot.constants.Ports;
-import com.stuypulse.robot.constants.Settings;
-import com.stuypulse.robot.constants.Settings.Swerve.Controllers.Modules;
-import com.stuypulse.robot.constants.Settings.Swerve.ModuleOffsets.BackLeft;
-import com.stuypulse.robot.subsystems.swerve.SwerveDrive.ModulePosition;
+import com.stuypulse.robot.constants.Settings.Swerve.Drive;
+import com.stuypulse.robot.constants.Settings.Swerve.Encoder;
+import com.stuypulse.robot.constants.Settings.Swerve.Turn;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.ctre.phoenix6.hardware.CANcoder;
@@ -30,6 +24,9 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 public class SacrodModule extends SwerveModule {
 
@@ -54,53 +51,30 @@ public class SacrodModule extends SwerveModule {
 
     private final Controller driveController;
 
-    public SacrodModule(ModulePosition position) {
-        this.name = position.toString();
-        this.location = Settings.Swerve.ModuleOffsets.getXYOffset(position);
-        this.angleOffset = Settings.Swerve.ModuleOffsets.getAngleOffset(position);
+    public SacrodModule(String name, int driveID, int turnID, int canCoderID, Translation2d location, Angle angleOffset, boolean driveInverted, boolean turnInverted) {
+        this.name = name;
+        this.location = location;
+        this.angleOffset = angleOffset;
 
-        this.driveController = new PIDController(Modules.Drive.kP, Modules.Drive.kI, Modules.Drive.kD)
-                                .add(new MotorFeedforward(Modules.Drive.kS, Modules.Drive.kV, Modules.Drive.kA).velocity());
-        this.turnController = new AnglePIDController(Modules.Turn.kP, Modules.Turn.kI, Modules.Turn.kD);
+        driveMotor = new SparkMax(driveID, MotorType.kBrushless);
+        SparkBaseConfig driveConfig = new SparkMaxConfig().inverted(driveInverted).idleMode(IdleMode.kBrake);
+        driveConfig.encoder.positionConversionFactor(Encoder.Drive.POSITION_CONVERSION).velocityConversionFactor(Encoder.Drive.VELOCITY_CONVERSION);
+        driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        driveEncoder = driveMotor.getEncoder();
+
+        turnMotor = new SparkMax(turnID, MotorType.kBrushless);
+        SparkBaseConfig turnConfig = new SparkMaxConfig().inverted(turnInverted).idleMode(IdleMode.kBrake);
+        turnConfig.encoder.positionConversionFactor(Encoder.Turn.POSITION_CONVERSION).velocityConversionFactor(Encoder.Turn.VELOCITY_CONVERSION);
+        turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+
+        this.driveController = new PIDController(Drive.kP, Drive.kP, Drive.kD)
+                                .add(new MotorFeedforward(Drive.kS, Drive.kV, Drive.kA).velocity());
+        this.turnController = new AnglePIDController(Turn.kP, Turn.kI, Turn.kD);
+
+        absoluteEncoder = new CANcoder(canCoderID);
 
         targetState = new SwerveModuleState();
-
-        switch (position) {
-            case FRONT_LEFT:
-                turnMotor = new SparkMax(Ports.Swerve.Turn.FRONT_LEFT, MotorType.kBrushless);
-                turnMotor.configure(Motors.Swerve.Turn.FRONT_LEFT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveMotor = new SparkMax(Ports.Swerve.Drive.FRONT_LEFT, MotorType.kBrushless);
-                driveMotor.configure(Motors.Swerve.Drive.FRONT_LEFT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveEncoder = driveMotor.getEncoder();
-                absoluteEncoder = new CANcoder(Ports.Swerve.CANCoderIds.FRONT_LEFT);
-                break;
-            case FRONT_RIGHT:
-                turnMotor = new SparkMax(Ports.Swerve.Turn.FRONT_RIGHT, MotorType.kBrushless);
-                turnMotor.configure(Motors.Swerve.Turn.FRONT_RIGHT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveMotor = new SparkMax(Ports.Swerve.Drive.FRONT_RIGHT, MotorType.kBrushless);
-                driveMotor.configure(Motors.Swerve.Drive.FRONT_RIGHT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveEncoder = driveMotor.getEncoder();
-                absoluteEncoder = new CANcoder(Ports.Swerve.CANCoderIds.FRONT_RIGHT);
-                break;
-            case BACK_LEFT:
-                turnMotor = new SparkMax(Ports.Swerve.Turn.BACK_LEFT, MotorType.kBrushless);
-                turnMotor.configure(Motors.Swerve.Turn.BACK_LEFT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveMotor = new SparkMax(Ports.Swerve.Drive.BACK_LEFT, MotorType.kBrushless);
-                driveMotor.configure(Motors.Swerve.Drive.BACK_LEFT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveEncoder = driveMotor.getEncoder();
-                absoluteEncoder = new CANcoder(Ports.Swerve.CANCoderIds.BACK_LEFT);
-                break;
-            case BACK_RIGHT:
-                turnMotor = new SparkMax(Ports.Swerve.Turn.BACK_RIGHT, MotorType.kBrushless);
-                turnMotor.configure(Motors.Swerve.Turn.BACK_RIGHT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveMotor = new SparkMax(Ports.Swerve.Drive.BACK_RIGHT, MotorType.kBrushless);
-                driveMotor.configure(Motors.Swerve.Drive.BACK_RIGHT, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-                driveEncoder = driveMotor.getEncoder();
-                absoluteEncoder = new CANcoder(Ports.Swerve.CANCoderIds.BACK_RIGHT);
-                break;
-            default:
-                throw new IllegalArgumentException();
-        }
     }
 
     @Override
@@ -164,6 +138,5 @@ public class SacrodModule extends SwerveModule {
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Error", driveController.getError());
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Voltage", driveController.getOutput());
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Current", driveMotor.getOutputCurrent());
-
     }
 }
