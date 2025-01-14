@@ -1,6 +1,7 @@
 package com.stuypulse.robot;
 
 import com.stuypulse.robot.commands.AutoPilot;
+import com.stuypulse.robot.commands.SeedFieldRelative;
 import com.stuypulse.robot.commands.auton.DoNothingAuton;
 import com.stuypulse.robot.commands.dropper.DropperDrop;
 import com.stuypulse.robot.commands.dropper.DropperShootSequence;
@@ -63,6 +64,8 @@ public class RobotContainer {
     /***************/
 
     private void configureButtonBindings() {
+
+        driver.getDPadUp().onTrue(new SeedFieldRelative());
 
         // manual shoot
         driver.getRightTriggerButton()

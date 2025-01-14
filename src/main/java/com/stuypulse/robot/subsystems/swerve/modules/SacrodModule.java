@@ -107,7 +107,7 @@ public class SacrodModule extends SwerveModule {
 
     private Rotation2d getRotation2d() {
         // not sure why we have to multiply this by 2
-        return new Rotation2d(getAbsolutePosition().minus(angleOffset.getRotation2d()).getDegrees() * 2);
+        return new Rotation2d(getAbsolutePosition().minus(angleOffset.getRotation2d()).getRadians() * 2);
     }
 
     @Override

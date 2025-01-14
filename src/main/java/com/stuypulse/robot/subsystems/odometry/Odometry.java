@@ -25,12 +25,18 @@ public abstract class Odometry extends SubsystemBase {
 
     public abstract Pose2d getPose();
 
+
     public final Translation2d getTranslation() {
         return getPose().getTranslation();
     }
 
     public final Rotation2d getRotation() {
         return getPose().getRotation();
+    }
+
+    public void seedFieldRelative() {
+        Pose2d newPose = new Pose2d(getPose().getX(), getPose().getY(), new Rotation2d());
+        reset(newPose);
     }
 
     public abstract void addVisionData(Pose2d robotPose, double timestamp);
