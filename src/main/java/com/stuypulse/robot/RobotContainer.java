@@ -75,7 +75,8 @@ public class RobotContainer {
         // align to closest coral and then shoot automatically
         driver.getRightTriggerButton()
             .whileTrue(new SwervePIDToPose(() -> Field.getClosestBranch().getTargetPose())
-                .andThen(new DropperShootSequence()));
+                .andThen(new DropperShootSequence()))
+            .onFalse(new DropperStop());
 
         // align to nearest algae
         driver.getRightButton()

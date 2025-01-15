@@ -39,8 +39,8 @@ public interface Settings {
         double WIDTH = Units.inchesToMeters(22.213); // intake side 
         double LENGTH = Units.inchesToMeters(22.213); 
 
-        double MAX_LINEAR_VELOCITY = 3.5;
-        double MAX_LINEAR_ACCEL = 8;
+        double MAX_LINEAR_VELOCITY = 2.0;
+        double MAX_LINEAR_ACCEL = 7.0;
         double MAX_ANGULAR_VELOCITY = 6.75; // (rad/s)
         double MAX_ANGULAR_ACCEL = 100.0; // (rad/s^2)
 
@@ -82,13 +82,13 @@ public interface Settings {
         }
     
         public interface Drive {
-            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 1.3);
+            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 3.5257);
             SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Drive/kI", 0.0);
             SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.0);
     
-            SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.17335);
-            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7274);
-            SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.456);
+            SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.26722);
+            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7119);
+            SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.36249);
         }
 
         public interface Encoder {
