@@ -14,6 +14,7 @@ import com.stuypulse.robot.constants.Settings.Driver.Drive;
 import com.stuypulse.robot.constants.Settings.Driver.Turn;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
 
 public class SwerveDriveDrive extends Command {
@@ -55,9 +56,13 @@ public class SwerveDriveDrive extends Command {
 
     @Override
     public void execute() {
-        Vector2D velocity = speed.get();
+        Vector2D targetVelocity = speed.get();
         double omega = turn.get();
-        if (velocity.magnitude() != 0 || omega != 0) {
+
+        ChassisSpeeds currentSpeed = swerve.getChassisSpeeds();
+        double currentSpeedMagnitude = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
+
+        if (targetVelocity.magnitude() > 0.05 || Math.abs(omega) > 0.05 || currentSpeedMagnitude > 0.05 || Math.abs(currentSpeed.omegaRadiansPerSecond) > 0.05) {
             swerve.drive(speed.get(), turn.get());
         }
         else {
