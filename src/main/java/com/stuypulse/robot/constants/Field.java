@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
-import java.util.ArrayList;
 
 /** This interface stores information about the field elements. */
 public interface Field {
@@ -177,7 +176,7 @@ public interface Field {
             }
 
             return correspondingAprilTagPose.toPose2d()
-                    .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
+                    .transformBy(new Transform2d(Settings.LENGTH/2 - 0.05, CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
         }
 
         public boolean isLeftPeg() {
