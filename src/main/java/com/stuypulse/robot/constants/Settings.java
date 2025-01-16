@@ -1,9 +1,6 @@
 package com.stuypulse.robot.constants;
 
-import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
-import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartNumber;
 
@@ -29,7 +26,7 @@ public interface Settings {
         boolean inverted = false;
         
         double DROP_SPEED = 0.5;
-        double REVERSE_SPEED = 0.5;
+        double REVERSE_SPEED = 0.33;
 
         double DROP_TIME = 0.75;
         double WAIT_TIME_AT_CORAL_STATION = 0.75;
@@ -62,13 +59,13 @@ public interface Settings {
             }
 
             public interface Theta {
-                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 3.0);
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 6.0);
                 SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/Theta/kI", 0.0);
-                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.0);
+                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.2);
             }
 
-            SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.1);
-            SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.1);
+            SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.05);
+            SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.05);
             SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Theta Tolerance (rad)", 0.1);
 
             double XY_DEBOUNCE = 0.1;
