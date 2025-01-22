@@ -176,21 +176,14 @@ public interface Field {
             }
 
             return correspondingAprilTagPose.toPose2d()
-                    .transformBy(new Transform2d(Settings.LENGTH/2 - 0.3, CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
+                    .transformBy(new Transform2d(Settings.LENGTH/2 + 0.05, CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
         }
 
         public boolean isLeftPeg() {
-            switch (this) {
-                case A:
-                case C:
-                case E:
-                case G:
-                case I:
-                case K:
-                    return true;
-                default:
-                    return false;
-            }
+            return switch (this) {
+                case A, C, E, G, I, K -> true;
+                default -> false;
+            };
         }
 
         /**  
@@ -198,17 +191,10 @@ public interface Field {
          * The other half is facing the barge / the opposite alliance
         */
         public boolean onDriverStationSide() {
-            switch (this) {
-                case A:
-                case B:
-                case C:
-                case D:
-                case L:
-                case K:
-                    return true;
-                default:
-                    return false;
-            }
+            return switch (this) {
+                case A, B, C, D, L, K -> true;
+                default -> false;
+            };
         }
     }
 
@@ -245,14 +231,10 @@ public interface Field {
         KL;
 
         public boolean isHighAlgae() {
-            switch (this) {
-                case AB:
-                case EF:
-                case IJ:
-                    return true;
-                default:
-                    return false;
-            }
+            return switch (this) {
+                case AB, EF, IJ -> true;
+                default -> false;
+            };
         }
 
         public Pose2d getTargetPose() {
