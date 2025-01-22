@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue Top to 1L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 1L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to 6R"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 6R to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to 6R"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 6R to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to 6L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue 6L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Blue HP to 6L"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Blue Autons",
+  "choreoAuto": false
+}
