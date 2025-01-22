@@ -1,0 +1,67 @@
+{
+  "version": "2025.0",
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red Bottom to 3R"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red 3R to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to 4L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red 4L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to 4L"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red 4L to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to 4R"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red 4R to HP"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Red HP to 4R"
+          }
+        }
+      ]
+    }
+  },
+  "resetOdom": true,
+  "folder": "Red Autons",
+  "choreoAuto": false
+}

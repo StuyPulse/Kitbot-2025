@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 1.5927741608796284,
+        "y": 0.6180750868055543
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.224773866503856,
+        "y": 1.3501259355564548
+      },
+      "isLocked": false,
+      "linkedName": "Red Bottom HP"
+    },
+    {
+      "anchor": {
+        "x": 3.4535214120370363,
+        "y": 2.8059700520833326
+      },
+      "prevControl": {
+        "x": 2.7587295322511447,
+        "y": 2.0129860398314054
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Red 4R"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -119.99999999999999
+  },
+  "reversed": false,
+  "folder": "Red To Reef",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -125.00000000000001
+  },
+  "useDefaultConstraints": true
+}

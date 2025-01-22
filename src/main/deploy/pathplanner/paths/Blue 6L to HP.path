@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.4187568721064805,
+        "y": 5.2345963541666665
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.547863890709938,
+        "y": 6.2655048304411185
+      },
+      "isLocked": false,
+      "linkedName": "Blue 6L"
+    },
+    {
+      "anchor": {
+        "x": 1.6040711805555545,
+        "y": 7.401760706018519
+      },
+      "prevControl": {
+        "x": 2.2916505162662064,
+        "y": 6.603640515913268
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "Blue Top HP"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 125.00000000000001
+  },
+  "reversed": false,
+  "folder": "Blue To HP",
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 119.99999999999999
+  },
+  "useDefaultConstraints": true
+}
