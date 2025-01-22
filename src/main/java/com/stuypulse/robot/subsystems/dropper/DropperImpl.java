@@ -16,7 +16,7 @@ public class DropperImpl extends Dropper {
 
     public DropperImpl() {
         super();
-        this.motor = new SparkMax(Ports.Dropper.MOTOR, MotorType.kBrushed);
+        this.motor = new SparkMax(Ports.Dropper.MOTOR, MotorType.kBrushless);
         SparkBaseConfig motorConfig = new SparkMaxConfig().inverted(Settings.Dropper.inverted).idleMode(IdleMode.kBrake);
         motor.configure(motorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
     }
