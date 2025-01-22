@@ -83,9 +83,6 @@ public class RobotContainer {
         // align to nearest algae
         driver.getRightButton()
             .whileTrue(new SwervePIDToPose(() -> Field.getClosestAlgaeBranch().getTargetPose()));
-
-        driver.getDPadLeft()
-            .whileTrue(new SwervePIDToPose(new Pose2d(1, Field.WIDTH, new Rotation2d())));
         
         driver.getTopButton()
             .whileTrue(new AutoPilot().repeatedly());

@@ -19,14 +19,14 @@ import edu.wpi.first.math.util.Units;
 public interface Settings {
     double DT = 1.0 / 50.0;
 
-    double WIDTH = Units.inchesToMeters(29); // intake side 
-    double LENGTH = Units.inchesToMeters(29);
+    double WIDTH = Units.inchesToMeters(36); // intake side 
+    double LENGTH = Units.inchesToMeters(36);
 
     public interface Dropper {
-        boolean inverted = false;
+        boolean inverted = true;
         
-        double DROP_SPEED = 0.5;
-        double REVERSE_SPEED = 0.33;
+        double DROP_SPEED = 0.3;
+        double REVERSE_SPEED = 0.4;
 
         double DROP_TIME = 0.75;
         double WAIT_TIME_AT_CORAL_STATION = 0.75;
