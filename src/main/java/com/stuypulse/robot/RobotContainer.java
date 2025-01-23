@@ -13,9 +13,9 @@ import com.stuypulse.robot.commands.dropper.DropperShootSequence;
 import com.stuypulse.robot.commands.dropper.DropperStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwervePIDToPose;
+import com.stuypulse.robot.commands.swerve.SwervePathFind;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
-import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.dropper.Dropper;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
@@ -24,8 +24,6 @@ import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,6 +68,12 @@ public class RobotContainer {
 
         driver.getDPadUp().onTrue(new SeedFieldRelative());
 
+        // align to closest coral and then shoot automatically
+        driver.getRightTriggerButton()
+            .whileTrue(new SwervePIDToPose(() -> Field.getClosestBranch().getTargetPose())
+                .andThen(new DropperShootSequence()))
+            .onFalse(new DropperStop());
+
         // manual shoot
         driver.getRightBumper()
             .onTrue(new DropperDrop())
@@ -78,12 +82,6 @@ public class RobotContainer {
         driver.getLeftTriggerButton()
             .onTrue(new DropperReverse())
             .onFalse(new DropperStop());
-        
-        // align to closest coral and then shoot automatically
-        driver.getRightTriggerButton()
-            .whileTrue(new SwervePIDToPose(() -> Field.getClosestBranch().getTargetPose()).withTolerance(0.01, 0.01, Settings.Swerve.Alignment.THETA_TOLERANCE.get())
-                .andThen(new DropperShootSequence()))
-            .onFalse(new DropperStop());
 
         // align to nearest algae
         driver.getRightButton()
@@ -91,6 +89,8 @@ public class RobotContainer {
         
         driver.getTopButton()
             .whileTrue(new AutoPilot().repeatedly());
+        
+        driver.getLeftButton().whileTrue(SwervePathFind.toNearestCoralStation().andThen(new SwervePIDToPose(() -> Field.getTargetPoseForCDCoralStation())));
     }
 
     /**************/
