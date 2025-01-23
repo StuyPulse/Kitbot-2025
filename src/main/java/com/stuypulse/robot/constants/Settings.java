@@ -36,13 +36,13 @@ public interface Settings {
         double WIDTH = Units.inchesToMeters(22.213); // intake side 
         double LENGTH = Units.inchesToMeters(22.213); 
 
-        double MAX_LINEAR_VELOCITY = 2.0;
-        double MAX_LINEAR_ACCEL = 7.0;
-        double MAX_ANGULAR_VELOCITY = 6.75; // (rad/s)
-        double MAX_ANGULAR_ACCEL = 100.0; // (rad/s^2)
+        double MAX_LINEAR_VELOCITY = 3.0;
+        double MAX_LINEAR_ACCEL = 3.0;
+        double MAX_ANGULAR_VELOCITY = 3.5; // (rad/s)
+        double MAX_ANGULAR_ACCEL = 35.0; // (rad/s^2)
 
-        double MODULE_VELOCITY_DEADBAND = 0.02; // (m/s)
-        double MAX_MODULE_SPEED = 5.0; // (m/s)
+        double MODULE_VELOCITY_DEADBAND = 0.05; // (m/s)
+        double MAX_MODULE_SPEED = 4.0; // (m/s)
 
         PathConstraints DEFAULT_CONSTRAINTS =
             new PathConstraints(
@@ -53,13 +53,13 @@ public interface Settings {
         
         public interface Alignment {
             public interface XY {
-                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 3.0);
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 2.0);
                 SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/XY/kI", 0.0);
-                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.0);
+                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.01);
             }
 
             public interface Theta {
-                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 6.0);
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 5.0);
                 SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/Theta/kI", 0.0);
                 SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.2);
             }
@@ -68,8 +68,8 @@ public interface Settings {
             SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.05);
             SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Theta Tolerance (rad)", 0.1);
 
-            double XY_DEBOUNCE = 0.1;
-            double THETA_DEBOUNCE = 0.1;
+            double XY_DEBOUNCE = 0.05;
+            double THETA_DEBOUNCE = 0.05;
         }
 
         public interface Turn {
@@ -79,12 +79,12 @@ public interface Settings {
         }
     
         public interface Drive {
-            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 3.5257);
+            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 0.0);
             SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Drive/kI", 0.0);
-            SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.0);
+            SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.01);
     
             SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.26722);
-            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7119);
+            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.2119);
             SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.36249);
         }
 

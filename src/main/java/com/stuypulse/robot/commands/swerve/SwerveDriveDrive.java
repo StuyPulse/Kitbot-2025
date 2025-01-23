@@ -1,5 +1,8 @@
 package com.stuypulse.robot.commands.swerve;
 
+import com.stuypulse.robot.constants.Settings.Driver.Drive;
+import com.stuypulse.robot.constants.Settings.Driver.Turn;
+import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.math.SLMath;
 import com.stuypulse.stuylib.math.Vector2D;
@@ -9,10 +12,6 @@ import com.stuypulse.stuylib.streams.vectors.VStream;
 import com.stuypulse.stuylib.streams.vectors.filters.VDeadZone;
 import com.stuypulse.stuylib.streams.vectors.filters.VLowPassFilter;
 import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
-
-import com.stuypulse.robot.constants.Settings.Driver.Drive;
-import com.stuypulse.robot.constants.Settings.Driver.Turn;
-import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,11 +61,12 @@ public class SwerveDriveDrive extends Command {
         ChassisSpeeds currentSpeed = swerve.getChassisSpeeds();
         double currentSpeedMagnitude = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
 
-        if (targetVelocity.magnitude() > 0.05 || Math.abs(omega) > 0.05 || currentSpeedMagnitude > 0.05 || Math.abs(currentSpeed.omegaRadiansPerSecond) > 0.05) {
-            swerve.drive(speed.get(), turn.get());
-        }
-        else {
-            swerve.setXMode();
-        }
+        // if (targetVelocity.magnitude() > 0.05 || Math.abs(omega) > 0.05 || currentSpeedMagnitude > 0.05 || Math.abs(currentSpeed.omegaRadiansPerSecond) > 0.05) {
+        //     swerve.drive(speed.get(), turn.get());
+        // }
+        // else {
+        //     swerve.setXMode();
+        // }
+        swerve.drive(speed.get(), turn.get());
     }
 }
