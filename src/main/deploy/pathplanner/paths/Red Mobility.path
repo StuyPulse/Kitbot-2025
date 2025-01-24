@@ -8,8 +8,8 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.958922519632885,
-        "y": 3.9827149838981355
+        "x": 6.957790701729911,
+        "y": 3.9810311453683034
       },
       "isLocked": false,
       "linkedName": "Red Middle Start Pose"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": 0.4814658058383698
   },
   "useDefaultConstraints": true
 }

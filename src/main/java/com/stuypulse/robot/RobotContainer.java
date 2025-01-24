@@ -7,12 +7,14 @@ import com.stuypulse.robot.commands.auton.L1.Bottom5PieceL1;
 import com.stuypulse.robot.commands.auton.L1.Top5PieceL1;
 import com.stuypulse.robot.commands.auton.tests.Mobility;
 import com.stuypulse.robot.commands.auton.tests.SquareTest;
+import com.stuypulse.robot.commands.auton.tests.StraightLineTest;
 import com.stuypulse.robot.commands.dropper.DropperDrop;
 import com.stuypulse.robot.commands.dropper.DropperReverse;
 import com.stuypulse.robot.commands.dropper.DropperShootSequence;
 import com.stuypulse.robot.commands.dropper.DropperStop;
 import com.stuypulse.robot.commands.swerve.SwerveDriveDrive;
 import com.stuypulse.robot.commands.swerve.SwervePIDToPose;
+import com.stuypulse.robot.commands.swerve.SwervePathFind;
 import com.stuypulse.robot.commands.swerve.SwervePathFind;
 import com.stuypulse.robot.constants.Field;
 import com.stuypulse.robot.constants.Ports;
@@ -24,6 +26,8 @@ import com.stuypulse.robot.util.PathUtil.AutonConfig;
 import com.stuypulse.stuylib.input.Gamepad;
 import com.stuypulse.stuylib.input.gamepads.AutoGamepad;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -74,6 +78,12 @@ public class RobotContainer {
                 .andThen(new DropperShootSequence()))
             .onFalse(new DropperStop());
 
+        // align to closest coral and then shoot automatically
+        driver.getRightTriggerButton()
+            .whileTrue(new SwervePIDToPose(() -> Field.getClosestBranch().getTargetPose())
+                .andThen(new DropperShootSequence()))
+            .onFalse(new DropperStop());
+
         // manual shoot
         driver.getRightBumper()
             .onTrue(new DropperDrop())
@@ -82,13 +92,25 @@ public class RobotContainer {
         driver.getLeftTriggerButton()
             .onTrue(new DropperReverse())
             .onFalse(new DropperStop());
+        /* 
+        // align to closest coral and then shoot automatically
+        driver.getRightTriggerButton()
+            .whileTrue(new SwervePIDToPose(() -> Field.getClosestBranch().getTargetPose()).withTolerance(0.01, 0.01, Settings.Swerve.Alignment.THETA_TOLERANCE.get())
+                .andThen(new DropperShootSequence()))
+            .onFalse(new DropperStop());
+*/
 
         // align to nearest algae
         driver.getRightButton()
             .whileTrue(new SwervePIDToPose(() -> Field.getClosestAlgaeBranch().getTargetPose()));
+
+        driver.getDPadLeft()
+            .whileTrue(new SwervePIDToPose(new Pose2d(1, Field.WIDTH, new Rotation2d())));
         
         driver.getTopButton()
             .whileTrue(new AutoPilot().repeatedly());
+        
+        driver.getLeftButton().whileTrue(SwervePathFind.toNearestCoralStation().andThen(new SwervePIDToPose(() -> Field.getTargetPoseForCDCoralStation())));
         
         driver.getLeftButton().whileTrue(SwervePathFind.toNearestCoralStation().andThen(new SwervePIDToPose(() -> Field.getTargetPoseForCDCoralStation())));
     }
@@ -126,11 +148,14 @@ public class RobotContainer {
         "Blue Mobility");
         AutonConfig MOBILITY_RED = new AutonConfig("Mobility", Mobility::new,
         "Red Mobility");
+        AutonConfig STRAIGHT_LINE_RED = new AutonConfig("Straight Line Test", StraightLineTest::new,
+        "Straight Line Test");
 
         SQUARE_TEST.registerBlue(autonChooser);
         TURN_SQUARE_TEST.registerBlue(autonChooser);
         MOBILITY_BLUE.registerBlue(autonChooser);
         MOBILITY_RED.registerRed(autonChooser);
+        STRAIGHT_LINE_RED.registerRed(autonChooser);
 
         SmartDashboard.putData("Autonomous", autonChooser);
     }
