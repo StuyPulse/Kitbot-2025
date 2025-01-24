@@ -1,9 +1,6 @@
 package com.stuypulse.robot.constants;
 
-import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.path.PathConstraints;
-import com.stuypulse.stuylib.control.Controller;
-import com.stuypulse.stuylib.control.feedback.PIDController;
 import com.stuypulse.stuylib.math.Angle;
 import com.stuypulse.stuylib.network.SmartNumber;
 
@@ -22,14 +19,14 @@ import edu.wpi.first.math.util.Units;
 public interface Settings {
     double DT = 1.0 / 50.0;
 
-    double WIDTH = Units.inchesToMeters(29); // intake side 
-    double LENGTH = Units.inchesToMeters(29);
+    double WIDTH = Units.inchesToMeters(36); // intake side 
+    double LENGTH = Units.inchesToMeters(36);
 
     public interface Dropper {
-        boolean inverted = false;
+        boolean inverted = true;
         
-        double DROP_SPEED = 0.5;
-        double REVERSE_SPEED = 0.5;
+        double DROP_SPEED = 0.3;
+        double REVERSE_SPEED = 0.4;
 
         double DROP_TIME = 0.75;
         double WAIT_TIME_AT_CORAL_STATION = 0.75;
@@ -39,13 +36,13 @@ public interface Settings {
         double WIDTH = Units.inchesToMeters(22.213); // intake side 
         double LENGTH = Units.inchesToMeters(22.213); 
 
-        double MAX_LINEAR_VELOCITY = 4.9;
-        double MAX_LINEAR_ACCEL = 15;
-        double MAX_ANGULAR_VELOCITY = 6.75; // (rad/s)
-        double MAX_ANGULAR_ACCEL = 200.0; // (rad/s^2)
+        double MAX_LINEAR_VELOCITY = 3.0;
+        double MAX_LINEAR_ACCEL = 3.0;
+        double MAX_ANGULAR_VELOCITY = 3.5; // (rad/s)
+        double MAX_ANGULAR_ACCEL = 35.0; // (rad/s^2)
 
-        double MODULE_VELOCITY_DEADBAND = 0.02; // (m/s)
-        double MAX_MODULE_SPEED = 5.0; // (m/s)
+        double MODULE_VELOCITY_DEADBAND = 0.05; // (m/s)
+        double MAX_MODULE_SPEED = 4.0; // (m/s)
 
         PathConstraints DEFAULT_CONSTRAINTS =
             new PathConstraints(
@@ -56,23 +53,23 @@ public interface Settings {
         
         public interface Alignment {
             public interface XY {
-                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 3.0);
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/XY/kP", 2.0);
                 SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/XY/kI", 0.0);
-                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.0);
+                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/XY/kD", 0.01);
             }
 
             public interface Theta {
-                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 3.0);
+                SmartNumber kP = new SmartNumber("Swerve/Chassis/PID/Theta/kP", 5.0);
                 SmartNumber kI = new SmartNumber("Swerve/Chassis/PID/Theta/kI", 0.0);
-                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.0);
+                SmartNumber kD = new SmartNumber("Swerve/Chassis/PID/Theta/kD", 0.2);
             }
 
-            SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.1);
-            SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.1);
+            SmartNumber X_TOLERANCE = new SmartNumber("Alignment/X Tolerance (m)", 0.05);
+            SmartNumber Y_TOLERANCE = new SmartNumber("Alignment/Y Tolerance (m)", 0.05);
             SmartNumber THETA_TOLERANCE = new SmartNumber("Alignment/Theta Tolerance (rad)", 0.1);
 
-            double XY_DEBOUNCE = 0.1;
-            double THETA_DEBOUNCE = 0.1;
+            double XY_DEBOUNCE = 0.05;
+            double THETA_DEBOUNCE = 0.05;
         }
 
         public interface Turn {
@@ -82,13 +79,13 @@ public interface Settings {
         }
     
         public interface Drive {
-            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 1.3);
+            SmartNumber kP = new SmartNumber("Swerve/Modules/PID/Drive/kP", 0.0);
             SmartNumber kI = new SmartNumber("Swerve/Modules/PID/Drive/kI", 0.0);
-            SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.0);
+            SmartNumber kD = new SmartNumber("Swerve/Modules/PID/Drive/kD", 0.01);
     
-            SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.17335);
-            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.7274);
-            SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.456);
+            SmartNumber kS = new SmartNumber("Swerve/Modules/PID/Drive/kS", 0.26722);
+            SmartNumber kV = new SmartNumber("Swerve/Modules/PID/Drive/kV", 2.2119);
+            SmartNumber kA = new SmartNumber("Swerve/Modules/PID/Drive/kA", 0.36249);
         }
 
         public interface Encoder {
@@ -119,25 +116,25 @@ public interface Settings {
         public interface FrontLeft {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(24.785156);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * +0.5);
         }
         public interface FrontRight {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(-85.913086);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * +0.5, WIDTH * -0.5);
         }
         public interface BackLeft {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(26.762695);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * +0.5);
         }
         public interface BackRight {
             boolean DRIVE_INVERTED = false;
             boolean TURN_INVERTED = false;
-            Angle ANGLE_OFFSET = Angle.fromDegrees(0.0);
+            Angle ANGLE_OFFSET = Angle.fromDegrees(-23.686523);
             Translation2d XY_OFFSET = new Translation2d(LENGTH * -0.5, WIDTH * -0.5);
         }
     }
@@ -148,7 +145,7 @@ public interface Settings {
 
     public interface Driver {
         public interface Drive {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.03);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Drive/Deadband", 0.05);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Drive/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Drive/Power", 2);
@@ -158,7 +155,7 @@ public interface Settings {
         }
 
         public interface Turn {
-            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.03);
+            SmartNumber DEADBAND = new SmartNumber("Driver Settings/Turn/Deadband", 0.05);
 
             SmartNumber RC = new SmartNumber("Driver Settings/Turn/RC", 0.05);
             SmartNumber POWER = new SmartNumber("Driver Settings/Turn/Power", 2);

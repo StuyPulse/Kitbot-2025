@@ -31,6 +31,7 @@ import edu.wpi.first.wpilibj.SPI;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -38,6 +39,7 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 public class SwerveDrive extends SubsystemBase {
 
@@ -107,6 +109,10 @@ public class SwerveDrive extends SubsystemBase {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public Command followPathCommand(PathPlannerPath path) {
+        return AutoBuilder.followPath(path);
     }
 
     public void initFieldObjects(Field2d field) {
@@ -226,10 +232,10 @@ public class SwerveDrive extends SubsystemBase {
 
     public void setXMode() {
         SwerveModuleState[] state = {
+            new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
             new SwerveModuleState(0, Rotation2d.fromDegrees(135)),
             new SwerveModuleState(0, Rotation2d.fromDegrees(225)),
             new SwerveModuleState(0, Rotation2d.fromDegrees(315)),
-            new SwerveModuleState(0, Rotation2d.fromDegrees(45)),
         };
         setModuleStates(state);
     }

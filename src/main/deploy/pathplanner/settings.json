@@ -2,8 +2,17 @@
   "robotWidth": 0.7366,
   "robotLength": 0.7366,
   "holonomicMode": true,
-  "pathFolders": [],
-  "autoFolders": [],
+  "pathFolders": [
+    "Blue To HP",
+    "Blue To Reef",
+    "Tests",
+    "Red To HP",
+    "Red To Reef"
+  ],
+  "autoFolders": [
+    "Red Autons",
+    "Blue Autons"
+  ],
   "defaultMaxVel": 3.0,
   "defaultMaxAccel": 3.0,
   "defaultMaxAngVel": 540.0,
@@ -15,7 +24,7 @@
   "driveWheelRadius": 0.051,
   "driveGearing": 6.857,
   "maxDriveSpeed": 5.45,
-  "driveMotorType": "vortex",
+  "driveMotorType": "NEO",
   "driveCurrentLimit": 60.0,
   "wheelCOF": 1.2,
   "flModuleX": 0.2804033,

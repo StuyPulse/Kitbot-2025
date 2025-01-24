@@ -123,6 +123,10 @@ public class SwervePIDToPose extends Command {
     @Override
     public void execute() {
         targetPose2d.setPose(Robot.isBlue() ? targetPose : Field.transformToOppositeAlliance(targetPose));
+
+        SmartDashboard.putNumber("Alignment/Target x", targetPose.getX());
+        SmartDashboard.putNumber("Alignment/Target y", targetPose.getY());
+        SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
         controller.update(targetPose, odometry.getPose());
 
         Vector2D speed = new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond)
@@ -147,6 +151,7 @@ public class SwervePIDToPose extends Command {
 
     @Override
     public void end(boolean interrupted) {
+        swerve.stop();
         Field.clearFieldObject(targetPose2d);
     }
 

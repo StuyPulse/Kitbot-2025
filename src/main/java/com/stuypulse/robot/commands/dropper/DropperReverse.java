@@ -11,10 +11,11 @@ public class DropperReverse extends InstantCommand{
 
     public DropperReverse() {
         this.dropper = Dropper.getInstance();
+        addRequirements(dropper);
     }
 
     @Override
     public void initialize() {
-        dropper.setState(State.DROPPING);
+        dropper.setState(State.REVERSING);
     }
 }

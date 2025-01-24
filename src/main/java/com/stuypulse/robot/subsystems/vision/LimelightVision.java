@@ -76,8 +76,8 @@ public class LimelightVision extends AprilTagVision{
                     PoseEstimate poseEstimate = Robot.isBlue() 
                         ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
                         : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
-
-                    if (poseEstimate.tagCount > 0) {
+                    
+                    if (poseEstimate != null && poseEstimate.tagCount > 0) {
                         Pose2d robotPose = poseEstimate.pose;
                         double timestamp = poseEstimate.timestampSeconds;
                         Odometry.getInstance().addVisionData(robotPose, timestamp);

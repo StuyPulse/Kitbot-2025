@@ -11,6 +11,7 @@ public class DropperDrop extends InstantCommand{
 
     public DropperDrop() {
         this.dropper = Dropper.getInstance();
+        addRequirements(dropper);
     }
 
     @Override

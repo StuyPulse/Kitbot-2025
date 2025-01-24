@@ -14,7 +14,6 @@ import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
-import java.util.ArrayList;
 
 /** This interface stores information about the field elements. */
 public interface Field {
@@ -147,18 +146,44 @@ public interface Field {
         K,
         L;
 
-        public boolean isLeftPeg() {
+        public Pose2d getTargetPose() {
+            Pose3d correspondingAprilTagPose;
             switch (this) {
                 case A:
+                case B:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_AB.getLocation() : NamedTags.RED_AB.getLocation();
+                    break;
                 case C:
+                case D:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_CD.getLocation() : NamedTags.RED_CD.getLocation();
+                    break;
                 case E:
+                case F:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_EF.getLocation() : NamedTags.RED_EF.getLocation();
+                    break;
                 case G:
+                case H:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_GH.getLocation() : NamedTags.RED_GH.getLocation();
+                    break;
                 case I:
+                case J:
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_IJ.getLocation() : NamedTags.RED_IJ.getLocation();
+                    break;
                 case K:
-                    return true;
+                case L:
                 default:
-                    return false;
+                    correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_KL.getLocation() : NamedTags.RED_KL.getLocation();
             }
+
+            return correspondingAprilTagPose.toPose2d()
+                    .transformBy(new Transform2d(Settings.LENGTH/2 + 0.15, CENTER_OF_TROUGH_TO_BRANCH * (this.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
+        }
+
+        public boolean isLeftPeg() {
+            return switch (this) {
+                case A, C, E, G, I, K -> true;
+                default -> false;
+            };
         }
 
         /**  
@@ -166,63 +191,93 @@ public interface Field {
          * The other half is facing the barge / the opposite alliance
         */
         public boolean onDriverStationSide() {
-            switch (this) {
-                case A:
-                case B:
-                case C:
-                case D:
-                case L:
-                case K:
-                    return true;
-                default:
-                    return false;
-            }
+            return switch (this) {
+                case A, B, C, D, L, K -> true;
+                default -> false;
+            };
         }
     }
 
-    public static Pose2d getTargetPoseForCoralBranch(CoralBranch position) { 
-        Pose3d correspondingAprilTagPose;
-        switch (position) {
-            case A:
-            case B:
-                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_AB.getLocation() : NamedTags.RED_AB.getLocation();
-                break;
-            case C:
-            case D:
-                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_CD.getLocation() : NamedTags.RED_CD.getLocation();
-                break;
-            case E:
-            case F:
-                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_EF.getLocation() : NamedTags.RED_EF.getLocation();
-                break;
-            case G:
-            case H:
-                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_GH.getLocation() : NamedTags.RED_GH.getLocation();
-                break;
-            case I:
-            case J:
-                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_IJ.getLocation() : NamedTags.RED_IJ.getLocation();
-                break;
-            case K:
-            case L:
-                correspondingAprilTagPose = Robot.isBlue() ? NamedTags.BLUE_KL.getLocation() : NamedTags.RED_KL.getLocation();
-                break;
-            default:
-                throw new IllegalArgumentException();
+    public static CoralBranch getClosestBranch() {
+        CoralBranch nearestBranch = CoralBranch.A;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (CoralBranch branch : CoralBranch.values()) {
+            double distance = Odometry.getInstance().getPose().minus(branch.getTargetPose()).getTranslation().getNorm();
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearestBranch = branch;
+            }
         }
-    
-        Pose2d targetPose = correspondingAprilTagPose.toPose2d()
-                                .transformBy(new Transform2d(Settings.LENGTH/2, CENTER_OF_TROUGH_TO_BRANCH * (position.isLeftPeg() ? -1 : 1), Rotation2d.fromDegrees(180)));
-        
-        return targetPose;
+
+        return nearestBranch;
     }
 
     public static void setTargetPosesForCoralBranchesToField() {
         for (CoralBranch branch : CoralBranch.values()) {
             Field2d field = Odometry.getInstance().getField();
-            Pose2d branchTargetPose = getTargetPoseForCoralBranch(branch);
-            field.getObject("Coral Branch " + branch.toString()).setPose(Robot.isBlue() ? branchTargetPose : transformToOppositeAlliance(branchTargetPose));
+            field.getObject("Coral Branch " + branch.toString()).setPose(Robot.isBlue() ? branch.getTargetPose() : transformToOppositeAlliance(branch.getTargetPose()));
         }
+    }
+
+    /*** REEF ALGAE ***/
+
+    public enum Algae {
+        AB,
+        CD,
+        EF,
+        GH,
+        IJ,
+        KL;
+
+        public boolean isHighAlgae() {
+            return switch (this) {
+                case AB, EF, IJ -> true;
+                default -> false;
+            };
+        }
+
+        public Pose2d getTargetPose() {
+            Pose3d correspondingAprilTag;
+            switch (this) {
+                case AB:
+                    correspondingAprilTag = Robot.isBlue() ? NamedTags.BLUE_AB.getLocation() : NamedTags.RED_AB.getLocation();
+                    break;
+                case CD:
+                    correspondingAprilTag = Robot.isBlue() ? NamedTags.BLUE_CD.getLocation() : NamedTags.RED_CD.getLocation();
+                    break;
+                case EF:
+                    correspondingAprilTag = Robot.isBlue() ? NamedTags.BLUE_EF.getLocation() : NamedTags.RED_EF.getLocation();
+                    break;
+                case GH:
+                    correspondingAprilTag = Robot.isBlue() ? NamedTags.BLUE_GH.getLocation() : NamedTags.RED_GH.getLocation();
+                    break;
+                case IJ:
+                    correspondingAprilTag = Robot.isBlue() ? NamedTags.BLUE_IJ.getLocation() : NamedTags.RED_IJ.getLocation();
+                    break;
+                case KL:
+                default:
+                    correspondingAprilTag = Robot.isBlue() ? NamedTags.BLUE_KL.getLocation() : NamedTags.RED_KL.getLocation();
+                    break;
+            }
+            return correspondingAprilTag.toPose2d()
+                    .transformBy(new Transform2d(Settings.LENGTH / 2, 0, Rotation2d.fromDegrees(180)));
+        }
+    }
+
+    public static Algae getClosestAlgaeBranch() {
+        Algae nearestAlgaeBranch = Algae.AB;
+        double closestDistance = Double.MAX_VALUE;
+
+        for (Algae algaeBranch : Algae.values()) {
+            double distance = Odometry.getInstance().getPose().minus(algaeBranch.getTargetPose()).getTranslation().getNorm();
+            if (distance < closestDistance) {
+                closestDistance = distance;
+                nearestAlgaeBranch = algaeBranch;
+            }
+        }
+
+        return nearestAlgaeBranch;
     }
 
     /*** CORAL STATIONS ***/
@@ -245,22 +300,6 @@ public interface Field {
         Pose2d klCoralStation = getTargetPoseForKLCoralStation();
 
         return robot.minus(cdCoralStation).getTranslation().getNorm() < robot.minus(klCoralStation).getTranslation().getNorm();
-    }
-
-    public static CoralBranch getClosestBranch() {
-        CoralBranch nearestBranch = CoralBranch.A;
-        double closestDistance = Double.MAX_VALUE;
-
-        for (CoralBranch branch : CoralBranch.values()) {
-            Pose2d target = getTargetPoseForCoralBranch(branch);
-            double distance = Odometry.getInstance().getPose().minus(target).getTranslation().getNorm();
-            if (distance < closestDistance) {
-                closestDistance = distance;
-                nearestBranch = branch;
-            }
-        }
-
-        return nearestBranch;
     }
 
     /**** EMPTY FIELD POSES ****/
