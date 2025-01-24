@@ -139,8 +139,9 @@ public interface Settings {
         }
     }
 
-    public interface Vision {        
-        Vector<N3> STDDEVS = VecBuilder.fill(0.3, 0.3, Math.toRadians(30));
+    public interface Vision {
+        SmartNumber DISTANCE_CUTOFF = new SmartNumber("Vision/Distance Cutoff", 4);
+        Vector<N3> MIN_STDEV = VecBuilder.fill(0.3, 0.3, 5);
     }
 
     public interface Driver {

@@ -2,13 +2,17 @@ package com.stuypulse.robot.subsystems.vision;
 
 import com.stuypulse.robot.Robot;
 import com.stuypulse.robot.constants.Cameras;
+import com.stuypulse.robot.constants.Settings;
 import com.stuypulse.robot.subsystems.odometry.Odometry;
 import com.stuypulse.robot.util.vision.LimelightHelpers;
 import com.stuypulse.robot.util.vision.LimelightHelpers.PoseEstimate;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class LimelightVision extends AprilTagVision{
@@ -67,6 +71,12 @@ public class LimelightVision extends AprilTagVision{
         }
     }
 
+    private Vector<N3> calculateSTDEVS(double avgTagDistance) {
+        return Settings.Vision.MIN_STDEV.plus(
+            VecBuilder.fill(1.0, 1.0, 2).times(avgTagDistance)
+        );
+    }
+
     @Override
     public void periodic() {
         if (enabled) {
@@ -77,10 +87,11 @@ public class LimelightVision extends AprilTagVision{
                         ? LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName)
                         : LimelightHelpers.getBotPoseEstimate_wpiRed(limelightName);
                     
-                    if (poseEstimate != null && poseEstimate.tagCount > 0) {
+                    if (poseEstimate != null && poseEstimate.tagCount > 0 && poseEstimate.avgTagDist < Settings.Vision.DISTANCE_CUTOFF.get()) {
                         Pose2d robotPose = poseEstimate.pose;
                         double timestamp = poseEstimate.timestampSeconds;
-                        Odometry.getInstance().addVisionData(robotPose, timestamp);
+
+                        Odometry.getInstance().addVisionData(robotPose, timestamp, calculateSTDEVS(poseEstimate.avgTagDist));
                     }
                 }
             }
