@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.4234154369212955,
-        "y": 5.240768952546295
+        "x": 3.7532671247209817,
+        "y": 5.004811750139509
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.5985259254079405,
-        "y": 6.231805087253876
+        "x": 2.9283776132076267,
+        "y": 5.995847884847089
       },
       "isLocked": false,
       "linkedName": "Red 6L"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

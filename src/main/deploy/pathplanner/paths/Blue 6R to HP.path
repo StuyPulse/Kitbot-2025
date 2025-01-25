@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.9418554687499987,
-        "y": 5.539674117476852
+        "x": 3.9800484793526785,
+        "y": 5.15472412109375
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.7036876624486004,
-        "y": 5.712566932832984
+        "x": 3.74188067305128,
+        "y": 5.327616936449882
       },
       "isLocked": false,
       "linkedName": "Blue 6R"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

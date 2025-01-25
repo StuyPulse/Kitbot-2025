@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.9473292824074067,
-        "y": 2.5024645543981476
+        "x": 3.960716465541294,
+        "y": 2.877525111607142
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5772188638338123,
-        "y": 2.237129119463719
+        "x": 3.5906060469676997,
+        "y": 2.6121896766727133
       },
       "isLocked": false,
       "linkedName": "Red 4L"
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,

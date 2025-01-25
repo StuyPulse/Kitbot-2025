@@ -8,20 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9925936890022837,
-        "y": 6.944645275628265
+        "x": 2.0134915147372063,
+        "y": 6.976528761587032
       },
       "isLocked": false,
       "linkedName": "Red Top HP"
     },
     {
       "anchor": {
-        "x": 3.4234154369212955,
-        "y": 5.240768952546295
+        "x": 3.7532671247209817,
+        "y": 5.004811750139509
       },
       "prevControl": {
-        "x": 3.2410423680395146,
-        "y": 5.449127820521438
+        "x": 3.5043766707870225,
+        "y": 5.253349929808627
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,8 +33,8 @@
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 6.0,
+    "maxAcceleration": 6.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
