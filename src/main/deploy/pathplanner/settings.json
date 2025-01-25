@@ -5,9 +5,9 @@
   "pathFolders": [
     "Blue To HP",
     "Blue To Reef",
-    "Tests",
     "Red To HP",
-    "Red To Reef"
+    "Red To Reef",
+    "Test Stuff"
   ],
   "autoFolders": [
     "Red Autons",
