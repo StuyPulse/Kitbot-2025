@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.2642974853515625,
-        "y": 2.8141222272600444
+        "x": 7.175428209806743,
+        "y": 2.914811924525669
       },
       "prevControl": null,
       "nextControl": {
-        "x": 6.085629696514689,
-        "y": 2.7435900871829286
+        "x": 5.987378928535863,
+        "y": 2.8948853492736815
       },
       "isLocked": false,
       "linkedName": "Blue Bottom-Mid Start Pose"
@@ -20,8 +20,8 @@
         "y": 2.914811924525669
       },
       "prevControl": {
-        "x": 6.201287772838203,
-        "y": 2.962162503043512
+        "x": 6.268821008581864,
+        "y": 2.897038253984953
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": "Blue To Reef",
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 0.0
+    "rotation": -59.99999999999999
   },
   "useDefaultConstraints": true
 }
