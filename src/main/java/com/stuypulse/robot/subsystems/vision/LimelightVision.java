@@ -73,7 +73,7 @@ public class LimelightVision extends AprilTagVision{
 
     private Vector<N3> calculateSTDEVS(double avgTagDistance) {
         return Settings.Vision.MIN_STDEV.plus(
-            VecBuilder.fill(1.0, 1.0, 2).times(avgTagDistance)
+            VecBuilder.fill(3.0, 3.0, 2).times(avgTagDistance)
         );
     }
 

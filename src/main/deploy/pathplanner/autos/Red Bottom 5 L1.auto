@@ -31,18 +31,6 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red HP to 4L"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red 4L to HP"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
             "pathName": "Red HP to 4R"
           }
         },
@@ -55,7 +43,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Red HP to 4R"
+            "pathName": "thingtwo"
           }
         }
       ]

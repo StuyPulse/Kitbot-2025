@@ -11,7 +11,6 @@ public class TurnSquareTest extends SequentialCommandGroup {
     public TurnSquareTest(PathPlannerPath... paths) {
 
         addCommands(
-            new VisionDisable(),
 
              SwerveDrive.getInstance().followPathCommand(paths[0]),
              SwerveDrive.getInstance().followPathCommand(paths[1]),

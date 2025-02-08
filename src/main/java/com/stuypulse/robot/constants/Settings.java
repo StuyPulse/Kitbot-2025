@@ -36,8 +36,8 @@ public interface Settings {
         double WIDTH = Units.inchesToMeters(22.213); // intake side 
         double LENGTH = Units.inchesToMeters(22.213); 
 
-        double MAX_LINEAR_VELOCITY = 3.0;
-        double MAX_LINEAR_ACCEL = 3.0;
+        double MAX_LINEAR_VELOCITY = 5.0;
+        double MAX_LINEAR_ACCEL = 15.0;
         double MAX_ANGULAR_VELOCITY = 3.5; // (rad/s)
         double MAX_ANGULAR_ACCEL = 35.0; // (rad/s^2)
 
@@ -140,7 +140,7 @@ public interface Settings {
     }
 
     public interface Vision {
-        SmartNumber DISTANCE_CUTOFF = new SmartNumber("Vision/Distance Cutoff", 4);
+        SmartNumber DISTANCE_CUTOFF = new SmartNumber("Vision/Distance Cutoff", 5);
         Vector<N3> MIN_STDEV = VecBuilder.fill(0.3, 0.3, 5);
     }
 

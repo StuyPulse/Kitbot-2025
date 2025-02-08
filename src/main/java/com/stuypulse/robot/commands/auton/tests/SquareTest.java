@@ -11,7 +11,6 @@ public class SquareTest extends SequentialCommandGroup {
     public SquareTest(PathPlannerPath... paths) {
 
         addCommands(
-            new VisionDisable(),
 
              SwerveDrive.getInstance().followPathCommand(paths[0]),
              SwerveDrive.getInstance().followPathCommand(paths[1]),

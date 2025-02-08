@@ -130,7 +130,7 @@ public class RobotContainer {
         AutonConfig BOTTOM_5_L1_BLUE = new AutonConfig("Bottom 5 L1", Bottom5PieceL1::new,
         "Blue Bottom to 3R", "Blue 3R to HP", "Blue HP to 4L", "Blue 4L to HP", "Blue HP to 4L", "Blue 4L to HP", "Blue HP to 4R", "Blue 4R to HP", "Blue HP to 4R");
         AutonConfig BOTTOM_5_L1_RED = new AutonConfig("Bottom 5 L1", Bottom5PieceL1::new,
-        "Red Bottom to 3R", "Red 3R to HP", "Red HP to 4L", "Red 4L to HP", "Red HP to 4L", "Red 4L to HP", "Red HP to 4R", "Red 4R to HP", "Red HP to 4R");
+        "Red Bottom to 3R", "Red 3R to HP", "Red HP to 4L", "Red 4L to HP", "Red HP to 4R", "Red 4R to HP", "thingtwo");
 
         TOP_5_L1_BLUE.registerDefaultBlue(autonChooser);
         TOP_5_L1_RED.registerDefaultRed(autonChooser);

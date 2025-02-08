@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.667420741489955,
-        "y": 3.0341705322265624
+        "x": 4.207684426229508,
+        "y": 3.7912397540983602
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7929849334115104,
-        "y": 2.026962379295452
+        "x": 3.389257489334563,
+        "y": 2.825587185805548
       },
       "isLocked": false,
       "linkedName": "Red 4R"
     },
     {
       "anchor": {
-        "x": 1.5927741608796284,
-        "y": 0.6180750868055543
+        "x": 1.2587090163934425,
+        "y": 0.33878073770491823
       },
       "prevControl": {
-        "x": 2.8992483293267526,
-        "y": 2.116122502756963
+        "x": 2.0894108724215856,
+        "y": 1.2932330569247052
       },
       "nextControl": null,
       "isLocked": false,
@@ -34,7 +34,7 @@
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 6.0,
-    "maxAcceleration": 6.0,
+    "maxAcceleration": 8.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
