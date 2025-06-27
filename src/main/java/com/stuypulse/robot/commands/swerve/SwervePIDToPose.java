@@ -70,7 +70,7 @@ public class SwervePIDToPose extends Command {
         velocityError = IStream.create(() -> {
             ChassisSpeeds speeds = controller.getError();
 
-            return new Translation2d(speeds.vxMetersPerSecond, speeds.vyMetersPerSecond).getNorm();
+            return new Translation2d(speeds.vx, speeds.vy).getNorm();
         })
         .filtered(new LowPassFilter(0.05))
         .filtered(x -> Math.abs(x));
@@ -129,9 +129,9 @@ public class SwervePIDToPose extends Command {
         SmartDashboard.putNumber("Alignment/Target angle", targetPose.getRotation().getDegrees());
         controller.update(targetPose, odometry.getPose());
 
-        Vector2D speed = new Vector2D(controller.getOutput().vxMetersPerSecond, controller.getOutput().vyMetersPerSecond)
+        Vector2D speed = new Vector2D(controller.getOutput().vx, controller.getOutput().vy)
             .clamp(Swerve.MAX_LINEAR_VELOCITY);
-        double rotation = SLMath.clamp(controller.getOutput().omegaRadiansPerSecond, Swerve.MAX_ANGULAR_VELOCITY);
+        double rotation = SLMath.clamp(controller.getOutput().omega, Swerve.MAX_ANGULAR_VELOCITY);
         
         SmartDashboard.putNumber("Alignment/Translation Target Speed", speed.distance());
 

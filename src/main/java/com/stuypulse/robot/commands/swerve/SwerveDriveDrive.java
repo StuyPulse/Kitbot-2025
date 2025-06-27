@@ -59,7 +59,7 @@ public class SwerveDriveDrive extends Command {
         double omega = turn.get();
 
         ChassisSpeeds currentSpeed = swerve.getChassisSpeeds();
-        double currentSpeedMagnitude = Math.hypot(currentSpeed.vxMetersPerSecond, currentSpeed.vyMetersPerSecond);
+        double currentSpeedMagnitude = Math.hypot(currentSpeed.vx, currentSpeed.vy);
 
         // if (targetVelocity.magnitude() > 0.05 || Math.abs(omega) > 0.05 || currentSpeedMagnitude > 0.05 || Math.abs(currentSpeed.omegaRadiansPerSecond) > 0.05) {
         //     swerve.drive(speed.get(), turn.get());

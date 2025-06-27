@@ -56,14 +56,14 @@ public class SacrodModule extends SwerveModule {
         this.location = location;
         this.angleOffset = angleOffset;
 
-        driveMotor = new SparkMax(driveID, MotorType.kBrushless);
+        driveMotor = new SparkMax(0, driveID, MotorType.kBrushless);
         SparkBaseConfig driveConfig = new SparkMaxConfig().inverted(driveInverted).idleMode(IdleMode.kBrake);
         driveConfig.encoder.positionConversionFactor(Encoder.Drive.POSITION_CONVERSION).velocityConversionFactor(Encoder.Drive.VELOCITY_CONVERSION);
         driveMotor.configure(driveConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
         driveEncoder = driveMotor.getEncoder();
 
-        turnMotor = new SparkMax(turnID, MotorType.kBrushless);
+        turnMotor = new SparkMax(0, turnID, MotorType.kBrushless);
         SparkBaseConfig turnConfig = new SparkMaxConfig().inverted(turnInverted).idleMode(IdleMode.kBrake);
         turnConfig.encoder.positionConversionFactor(Encoder.Turn.POSITION_CONVERSION).velocityConversionFactor(Encoder.Turn.VELOCITY_CONVERSION);
         turnMotor.configure(turnConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -127,7 +127,7 @@ public class SacrodModule extends SwerveModule {
                 Angle.fromRotation2d(targetState.angle),
                 Angle.fromRotation2d(getRotation2d())));
         
-        driveMotor.setVoltage(driveController.update(targetState.speedMetersPerSecond, getSpeed()));
+        driveMotor.setVoltage(driveController.update(targetState.speed, getSpeed()));
 
         SmartDashboard.putNumber("Swerve/" + name + "/Target Angle", targetState.angle.getDegrees());
         SmartDashboard.putNumber("Swerve/" + name + "/Angle", getRotation2d().getDegrees());
@@ -136,7 +136,7 @@ public class SacrodModule extends SwerveModule {
         SmartDashboard.putNumber("Swerve/" + name + "/Absolute Angle", getAbsolutePosition().getDegrees());
         SmartDashboard.putNumber("Swerve/" + name + "/Angle Current", turnMotor.getOutputCurrent());
 
-        SmartDashboard.putNumber("Swerve/" + name + "/Target Speed", targetState.speedMetersPerSecond);
+        SmartDashboard.putNumber("Swerve/" + name + "/Target Speed", targetState.speed);
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity", getSpeed());
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Error", driveController.getError());
         SmartDashboard.putNumber("Swerve/" + name + "/Velocity Voltage", driveController.getOutput());

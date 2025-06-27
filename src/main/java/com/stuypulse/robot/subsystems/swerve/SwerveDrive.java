@@ -26,15 +26,15 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.OnboardIMU;
 import edu.wpi.first.wpilibj.RobotBase;
-import edu.wpi.first.wpilibj.SPI;
+import edu.wpi.first.wpilibj.OnboardIMU.MountOrientation;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.FieldObject2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.SubsystemBase; 
 
-import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.config.PIDConstants;
 import com.pathplanner.lib.config.RobotConfig;
@@ -71,7 +71,9 @@ public class SwerveDrive extends SubsystemBase {
     private final SwerveModule[] modules;
 
     /** SENSORS */
-    private final AHRS gyro;
+    // private final AHRS gyro;
+
+    private final OnboardIMU imu; 
 
     private final SwerveDriveKinematics kinematics;
 
@@ -82,7 +84,7 @@ public class SwerveDrive extends SubsystemBase {
     protected SwerveDrive(SwerveModule... modules) {
         this.modules = modules;
 
-        gyro = new AHRS(SPI.Port.kMXP);
+        imu = new OnboardIMU(MountOrientation.kFlat);
 
         kinematics = new SwerveDriveKinematics(getModuleOffsets());
 
@@ -162,17 +164,16 @@ public class SwerveDrive extends SubsystemBase {
 
     /** MODULE STATES API **/
     public void drive(Vector2D velocity, double omega) {
-        ChassisSpeeds speeds = ChassisSpeeds.fromFieldRelativeSpeeds(
+        ChassisSpeeds speeds = new ChassisSpeeds(
                 velocity.x,
                 velocity.y,
-                -omega,
-                Odometry.getInstance().getRotation());
-
+                -omega);
+        speeds = speeds.toFieldRelative(imu.getRotation2d());
         Pose2d robotVel = new Pose2d(
-            Settings.DT * speeds.vxMetersPerSecond,
-            Settings.DT * speeds.vyMetersPerSecond,
-            Rotation2d.fromRadians(Settings.DT * speeds.omegaRadiansPerSecond));
-        Twist2d twistVel = new Pose2d().log(robotVel);
+            Settings.DT * speeds.vx,
+            Settings.DT * speeds.vy,
+            Rotation2d.fromRadians(Settings.DT * speeds.omega));
+            Twist2d twistVel = new Pose2d().log(robotVel);
 
         setChassisSpeeds(new ChassisSpeeds(
             twistVel.dx / Settings.DT,
@@ -186,7 +187,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     private static SwerveModuleState filterModuleState(SwerveModuleState state) {
-        if (Math.abs(state.speedMetersPerSecond) > Swerve.MODULE_VELOCITY_DEADBAND)
+        if (Math.abs(state.speed) > Swerve.MODULE_VELOCITY_DEADBAND)
             return state;
 
         return new SwerveModuleState(0, state.angle);
@@ -210,19 +211,19 @@ public class SwerveDrive extends SubsystemBase {
 
     /** GYRO API **/
     public Rotation2d getGyroAngle() {
-        return gyro.getRotation2d();
+        return imu.getRotation2d();
     }
 
     public double getGyroYaw() {
-        return gyro.getYaw();
+        return imu.getAngleZ();
     }
 
     public double getGyroPitch() {
-        return gyro.getPitch();
+        return imu.getAngleY();
     }
 
     public double getGyroRoll() {
-        return gyro.getRoll();
+        return imu.getAngleX();
     }
 
     /** KINEMATICS **/
@@ -258,17 +259,17 @@ public class SwerveDrive extends SubsystemBase {
         SmartDashboard.putNumber("Swerve/Gyro Pitch (deg)", getGyroPitch());
         SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll());
 
-        SmartDashboard.putNumber("Swerve/X Acceleration (Gs)", gyro.getWorldLinearAccelX());
-        SmartDashboard.putNumber("Swerve/Y Acceleration (Gs)", gyro.getWorldLinearAccelY());
-        SmartDashboard.putNumber("Swerve/Z Acceleration (Gs)", gyro.getWorldLinearAccelZ());
+        SmartDashboard.putNumber("Swerve/X Acceleration (Gs)", imu.getAccelX());
+        SmartDashboard.putNumber("Swerve/Y Acceleration (Gs)", imu.getAccelY());
+        SmartDashboard.putNumber("Swerve/Z Acceleration (Gs)", imu.getAccelZ());
     }
 
     @Override
     public void simulationPeriodic() {
         // Integrate omega in simulation and store in gyro
-        var speeds = getKinematics().toChassisSpeeds(getModuleStates());
+        // var speeds = getKinematics().toChassisSpeeds(getModuleStates());
 
-        gyro.setAngleAdjustment(gyro.getAngle() - Math.toDegrees(speeds.omegaRadiansPerSecond * Settings.DT));
+        // imu.setAngleAdjustment(imu.getRotation2d().getDegrees() - Math.toDegrees(speeds.omega * Settings.DT));
     }
 
 }

@@ -31,19 +31,17 @@ public class HolonomicController implements Sendable {
     }
 
     public ChassisSpeeds getOutput() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(
+        return new ChassisSpeeds(
                 xController.getOutput(),
                 yController.getOutput(),
-                angleController.getOutput(),
-                angleController.getMeasurement().getRotation2d());
+                angleController.getOutput()).toFieldRelative(angleController.getSetpoint().getRotation2d());
     }
 
     public ChassisSpeeds getError() {
-        return ChassisSpeeds.fromFieldRelativeSpeeds(
+        return new ChassisSpeeds(
                 xController.getError(),
                 yController.getError(),
-                angleController.getError().toDegrees(),
-                angleController.getMeasurement().getRotation2d());
+                angleController.getError().toDegrees()).toFieldRelative(angleController.getSetpoint().getRotation2d());
     }
 
     public boolean isDone(double xToleranceMeters, double yToleranceMeters, double angleToleranceDegrees) {
