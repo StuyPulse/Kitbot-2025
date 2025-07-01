@@ -79,12 +79,15 @@ public class SwerveDrive extends SubsystemBase {
 
     private final FieldObject2d[] module2ds;
 
+    private Rotation2d startHeading;
+
     /** PATHPLANNER */
 
     protected SwerveDrive(SwerveModule... modules) {
         this.modules = modules;
 
         imu = new OnboardIMU(MountOrientation.kFlat);
+        startHeading = imu.getRotation2d();
 
         kinematics = new SwerveDriveKinematics(getModuleOffsets());
 
@@ -167,8 +170,9 @@ public class SwerveDrive extends SubsystemBase {
         ChassisSpeeds speeds = new ChassisSpeeds(
                 velocity.x,
                 velocity.y,
-                -omega);
-        speeds = speeds.toFieldRelative(imu.getRotation2d());
+                omega);
+        speeds = speeds.toRobotRelative(getHeading());
+        // speeds = speeds.toFieldRelative(imu.getRotation2d());
         Pose2d robotVel = new Pose2d(
             Settings.DT * speeds.vx,
             Settings.DT * speeds.vy,
@@ -210,12 +214,16 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     /** GYRO API **/
-    public Rotation2d getGyroAngle() {
-        return imu.getRotation2d();
+    public Rotation2d getHeading() {
+        return imu.getRotation2d().minus(startHeading);
+    }
+
+    public void resetHeading() {
+        startHeading = imu.getRotation2d();
     }
 
     public double getGyroYaw() {
-        return imu.getAngleZ();
+        return imu.getAngleX();
     }
 
     public double getGyroPitch() {
@@ -223,7 +231,7 @@ public class SwerveDrive extends SubsystemBase {
     }
 
     public double getGyroRoll() {
-        return imu.getAngleX();
+        return imu.getAngleZ();
     }
 
     /** KINEMATICS **/
@@ -255,9 +263,10 @@ public class SwerveDrive extends SubsystemBase {
             module2ds[i].setPose(Robot.isBlue() ? modulePose : Field.transformToOppositeAlliance(modulePose));
         }
 
-        SmartDashboard.putNumber("Swerve/Gyro Angle (deg)", getGyroPitch());
-        SmartDashboard.putNumber("Swerve/Gyro Pitch (deg)", getGyroPitch());
-        SmartDashboard.putNumber("Swerve/Gyro Roll", getGyroRoll());
+        SmartDashboard.putNumber("Swerve/Heading (deg)", getHeading().getDegrees());
+        SmartDashboard.putNumber("Swerve/Gyro Yaw (rad)", getGyroYaw());
+        SmartDashboard.putNumber("Swerve/Gyro Pitch (rad)", getGyroPitch());
+        SmartDashboard.putNumber("Swerve/Gyro Roll (rad)", getGyroRoll());
 
         SmartDashboard.putNumber("Swerve/X Acceleration (Gs)", imu.getAccelX());
         SmartDashboard.putNumber("Swerve/Y Acceleration (Gs)", imu.getAccelY());

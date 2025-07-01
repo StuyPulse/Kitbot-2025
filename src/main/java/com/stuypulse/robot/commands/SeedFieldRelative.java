@@ -1,19 +1,19 @@
 package com.stuypulse.robot.commands;
 
-import com.stuypulse.robot.subsystems.odometry.Odometry;
+import com.stuypulse.robot.subsystems.swerve.SwerveDrive;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class SeedFieldRelative extends InstantCommand{
     
-    private final Odometry odometry;
+    private final SwerveDrive swerve;
 
     public SeedFieldRelative() {
-        this.odometry = Odometry.getInstance();
+        this.swerve = SwerveDrive.getInstance();
     }
 
     @Override
     public void initialize() {
-        odometry.seedFieldRelative();
+        swerve.resetHeading();
     }
 }

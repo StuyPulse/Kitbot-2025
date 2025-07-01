@@ -15,17 +15,18 @@ import com.stuypulse.stuylib.streams.vectors.filters.VRateLimit;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class SwerveDriveDrive extends Command {
 
     private final SwerveDrive swerve;
 
-    private final Gamepad driver;
+    private final CommandXboxController driver;
 
     private final VStream speed;
     private final IStream turn;
 
-    public SwerveDriveDrive(Gamepad driver) {
+    public SwerveDriveDrive(CommandXboxController driver) {
         swerve = SwerveDrive.getInstance();
 
         speed = VStream.create(this::getDriverInputAsVelocity)
@@ -39,6 +40,7 @@ public class SwerveDriveDrive extends Command {
 
         turn = IStream.create(driver::getRightX)
             .filtered(
+                x -> -x,
                 x -> SLMath.deadband(x, Turn.DEADBAND.get()),
                 x -> SLMath.spow(x, Turn.POWER.get()),
                 x -> x * Turn.MAX_TELEOP_TURN_SPEED.get(),
@@ -50,7 +52,7 @@ public class SwerveDriveDrive extends Command {
     }
 
     private Vector2D getDriverInputAsVelocity() {
-        return new Vector2D(driver.getLeftStick().y, -driver.getLeftStick().x);
+        return new Vector2D(driver.getLeftY(), driver.getLeftX());
     }
 
     @Override
