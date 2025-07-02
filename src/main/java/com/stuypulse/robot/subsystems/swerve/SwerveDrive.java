@@ -116,6 +116,10 @@ public class SwerveDrive extends SubsystemBase {
         }
     }
 
+    public SwerveModule[] getSwerveModules() {
+        return this.getSwerveModules();
+    }
+
     public Command followPathCommand(PathPlannerPath path) {
         return AutoBuilder.followPath(path);
     }
